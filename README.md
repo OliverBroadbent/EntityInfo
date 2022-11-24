@@ -4,6 +4,7 @@ Provides helpful icons, names, and descriptions for all entities.
 
 # Images
 
-https://i.imgur.com/XiCiulm.png
+![Alt text](https://i.imgur.com/XiCiulm.png "Title")
+
 
 # Credit
