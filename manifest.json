@@ -1,7 +1,7 @@
 {
   "link" : "https://github.com/OliverBroadbent/EntityDescriptions",
   "name" : "Entity Descriptions",
-  "version" : 2,
+  "version" : 3,
   "author" : "Broadbent",
   "description" : "Describes entity tags.",
   "editions" : ["JAVA", "BEDROCK", "CONSOLE"],

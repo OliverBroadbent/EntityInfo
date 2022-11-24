@@ -374,8 +374,13 @@ function EntityDescriptions.styler:ActiveEffects(entity, context)
         for i=0, activeEffects.childCount-1 do
 
             local activeEffect = activeEffects:child(i)
+            local tagType = TYPE.BYTE
 
-            if activeEffect:contains("Id", TYPE.BYTE) then
+            if(context.version >= 3080) then
+                tagType = TYPE.INT
+            end
+
+            if activeEffect:contains("Id", tagType) then
 
                 local dbEntry = Database:find(context.edition, "active_effects", tostring(activeEffect.lastFound.value))
 
