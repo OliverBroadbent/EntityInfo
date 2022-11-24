@@ -1,7 +1,9 @@
-# Extension Name
+# EntityDescriptions
 
-Brief description goes here
+Provides helpful icons, names, and descriptions for all entities. 
 
 # Images
+
+https://i.imgur.com/XiCiulm.png
 
 # Credit
