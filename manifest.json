@@ -1,9 +1,9 @@
 {
-  "link" : "",
-  "name" : "ExtensionName",
+  "link" : "https://github.com/OliverBroadbent/EntityDescriptions",
+  "name" : "Entity Descriptions",
   "version" : 1,
-  "author" : "",
-  "description" : "",
+  "author" : "Broadbent",
+  "description" : "Describes entity tags.",
   "editions" : ["JAVA", "BEDROCK", "CONSOLE"],
   "extension_types" : ["NBT_EDITOR_STYLE"],
   "tags" : []
