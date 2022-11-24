@@ -367,7 +367,7 @@ function EntityDescriptions.styler:PortalCooldown(entity, context)
 end
 
 function EntityDescriptions.styler:ActiveEffects(entity, context)
-    if(entity:contains("ActiveEffects", TYPE.COMPOUND)) then
+    if(entity:contains("ActiveEffects", TYPE.LIST, TYPE.COMPOUND)) then
 
         local activeEffects = entity.lastFound
 
