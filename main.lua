@@ -376,7 +376,7 @@ function EntityDescriptions.styler:ActiveEffects(entity, context)
             local activeEffect = activeEffects:child(i)
             local tagType = TYPE.BYTE
 
-            if(context.version >= 3080) then
+            if(context.edition == EDITION.JAVA and context.version >= 3080) then
                 tagType = TYPE.INT
             end
 
