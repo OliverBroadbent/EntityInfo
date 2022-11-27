@@ -1,6 +1,6 @@
-# EntityDescriptions
+# EntityInfo
 
-Provides helpful icons, names, and descriptions for all entities to make edits and navigation hassle free. This extension is designed to work with every Minecraft update and version, including support for legacy mobs. Enjoy :)
+Provides helpful icons, names, and descriptions for all entities to make edits and navigation less hassle. This extension is designed to work with every Minecraft update and version, including support for legacy mobs. Enjoy :)
 
 ### Entity names and icons
 

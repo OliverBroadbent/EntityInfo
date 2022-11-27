@@ -1,4 +1,4 @@
-EntityDescriptions = {
+EntityInfo = {
     styler = {
         type = EXTENSION_TYPE.NBT_EDITOR_STYLE,
         recursive = true
@@ -7,7 +7,7 @@ EntityDescriptions = {
 
 -- CUSTOM FUNCTIONS
 
-function EntityDescriptions.styler:ticksToTime(ticks)
+function EntityInfo.styler:ticksToTime(ticks)
     local timeString = ""
 
     local secs = ticks/20
@@ -23,7 +23,7 @@ function EntityDescriptions.styler:ticksToTime(ticks)
     return timeString
 end
 
-function EntityDescriptions.styler:colorToString(color)
+function EntityInfo.styler:colorToString(color)
 
     local colors = {
         {
@@ -81,7 +81,7 @@ function EntityDescriptions.styler:colorToString(color)
 
 end
 
-function EntityDescriptions.styler:getCustomNameJava(entity)
+function EntityInfo.styler:getCustomNameJava(entity)
     
     if(entity:contains("CustomName", TYPE.STRING)) then
         local customName = entity.lastFound.value
@@ -117,7 +117,7 @@ end
 
 -- BASE ENTITY
 
-function EntityDescriptions.styler:main(root, context)
+function EntityInfo.styler:main(root, context)
     context.version = 0
 
     if(context.edition == EDITION.JAVA) then -- DataVersion
@@ -128,7 +128,7 @@ function EntityDescriptions.styler:main(root, context)
     if((context.type & FILE_TYPE.PLAYER) ~= 0) then self:ProcessEntity(root, context) end
 end
 
-function EntityDescriptions.styler:recursion(root, target, context)
+function EntityInfo.styler:recursion(root, target, context)
 
     if(context.edition == EDITION.JAVA) then
         if(target.type == TYPE.LIST and target.listType == TYPE.COMPOUND and (target.name == "Entities" or target.name == "Passengers")) then
@@ -165,7 +165,7 @@ function EntityDescriptions.styler:recursion(root, target, context)
 
 end
 
-function EntityDescriptions.styler:ProcessEntity(entity, context)
+function EntityInfo.styler:ProcessEntity(entity, context)
     self:NameAndIcon(entity, context)
     self:Position(entity, context)
     self:Rotation(entity, context)
@@ -180,7 +180,7 @@ function EntityDescriptions.styler:ProcessEntity(entity, context)
     self:RunEntitySpecifics(entity, context)
 end
 
-function EntityDescriptions.styler:NameAndIcon(entity, context)
+function EntityInfo.styler:NameAndIcon(entity, context)
 
     if((context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) and entity:contains("id", TYPE.STRING)) then
 
@@ -192,7 +192,7 @@ function EntityDescriptions.styler:NameAndIcon(entity, context)
         Style:setLabelColor(entity, "#bfbfbf")
         entityName = entityName:gsub("[^%w]+", "")
 
-        Style:setIcon(entity, "EntityDescriptions/images/entities/" .. entityName .. ".png")
+        Style:setIcon(entity, "EntityInfo/images/entities/" .. entityName .. ".png")
     end
 
     if(context.edition == EDITION.BEDROCK) then
@@ -215,11 +215,11 @@ function EntityDescriptions.styler:NameAndIcon(entity, context)
         Style:setLabelColor(entity, "#bfbfbf")
         entityName = entityName:gsub("%s+", "")
 
-        Style:setIcon(entity, "EntityDescriptions/images/entities/" .. entityName .. ".png")
+        Style:setIcon(entity, "EntityInfo/images/entities/" .. entityName .. ".png")
     end
 end
 
-function EntityDescriptions.styler:Position(entity, context)
+function EntityInfo.styler:Position(entity, context)
 
     local listTypeCheck = TYPE.DOUBLE
 
@@ -232,7 +232,7 @@ function EntityDescriptions.styler:Position(entity, context)
 
             Style:setLabelColor(pos, "#bfbfbf")
             Style:setLabel(pos, "X:" .. tostring(math.floor(pos:child(0).value + 0.5)) .. ", Y:" .. tostring(math.floor(pos:child(1).value + 0.5)) .. ", Z:" .. tostring(math.floor(pos:child(2).value + 0.5)))
-            Style:setIcon(pos, "EntityDescriptions/images/Pos.png")
+            Style:setIcon(pos, "EntityInfo/images/Pos.png")
             Style:setLabel(pos:child(0), "X")
             Style:setLabel(pos:child(1), "Y")
             Style:setLabel(pos:child(2), "Z")
@@ -240,7 +240,7 @@ function EntityDescriptions.styler:Position(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Rotation(entity, context)
+function EntityInfo.styler:Rotation(entity, context)
 
     if(entity:contains("Rotation", TYPE.LIST, TYPE.FLOAT)) then
 
@@ -265,13 +265,13 @@ function EntityDescriptions.styler:Rotation(entity, context)
     
         Style:setLabelColor(rot, "#bfbfbf")
         Style:setLabel(rot, rotString)
-        Style:setIcon(rot, "EntityDescriptions/images/Rot.png")
+        Style:setIcon(rot, "EntityInfo/images/Rot.png")
         Style:setLabel(rot:child(0), "Yaw")
         Style:setLabel(rot:child(1), "Pitch")
     end
 end
 
-function EntityDescriptions.styler:Motion(entity, context)
+function EntityInfo.styler:Motion(entity, context)
 
     if(entity:contains("Motion", TYPE.LIST, TYPE.DOUBLE)) then
         
@@ -313,18 +313,18 @@ function EntityDescriptions.styler:Motion(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Health(entity, context)
+function EntityInfo.styler:Health(entity, context)
 
     if(entity:contains("Health", TYPE.SHORT) or entity:contains("Health", TYPE.FLOAT)) then
 
         local health = entity.lastFound
 
         Style:setLabel(health, string.gsub(string.format("%.1f", health.value/2), "%.0", "") .. " Hearts")
-        Style:setIcon(health, "EntityDescriptions/images/Health.png")
+        Style:setIcon(health, "EntityInfo/images/Health.png")
     end
 end
 
-function EntityDescriptions.styler:Fire(entity, context)
+function EntityInfo.styler:Fire(entity, context)
 
     if(entity:contains("Fire", TYPE.SHORT)) then
 
@@ -334,13 +334,13 @@ function EntityDescriptions.styler:Fire(entity, context)
             Style:setLabel(fire, "Not on fire")
         else
             Style:setLabel(fire, "Fire extinguishes in " .. self:ticksToTime(fire.value))
-            Style:setIcon(fire, "EntityDescriptions/images/Fire.png")
+            Style:setIcon(fire, "EntityInfo/images/Fire.png")
         end
 
     end
 end
 
-function EntityDescriptions.styler:Air(entity, context)
+function EntityInfo.styler:Air(entity, context)
 
     if(entity:contains("Air", TYPE.SHORT)) then
 
@@ -354,7 +354,7 @@ function EntityDescriptions.styler:Air(entity, context)
     end
 end
 
-function EntityDescriptions.styler:PortalCooldown(entity, context)
+function EntityInfo.styler:PortalCooldown(entity, context)
 
     if(entity:contains("PortalCooldown", TYPE.INT)) then
 
@@ -366,7 +366,7 @@ function EntityDescriptions.styler:PortalCooldown(entity, context)
     end
 end
 
-function EntityDescriptions.styler:ActiveEffects(entity, context)
+function EntityInfo.styler:ActiveEffects(entity, context)
     if(entity:contains("ActiveEffects", TYPE.LIST, TYPE.COMPOUND)) then
 
         local activeEffects = entity.lastFound
@@ -393,7 +393,7 @@ function EntityDescriptions.styler:ActiveEffects(entity, context)
 
                     activeEffectName = activeEffectName:gsub("[^%w]+", "")
 
-                    Style:setIcon(activeEffect, "EntityDescriptions/images/effects/" .. activeEffectName .. ".png")
+                    Style:setIcon(activeEffect, "EntityInfo/images/effects/" .. activeEffectName .. ".png")
                 end
             end
     
@@ -408,7 +408,7 @@ function EntityDescriptions.styler:ActiveEffects(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Attributes(entity, context)
+function EntityInfo.styler:Attributes(entity, context)
 
     if(entity:contains("Attributes", TYPE.LIST, TYPE.COMPOUND)) then
 
@@ -450,7 +450,7 @@ end
 
 -- ENTITY SPECIFIC
 
-function EntityDescriptions.styler:RunEntitySpecifics(entity, context)
+function EntityInfo.styler:RunEntitySpecifics(entity, context)
 
     local entityName = ""
 
@@ -481,7 +481,7 @@ function EntityDescriptions.styler:RunEntitySpecifics(entity, context)
     self[entityName](self, entity, context)
 end
 
-function EntityDescriptions.styler:Allay(entity, context)
+function EntityInfo.styler:Allay(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -503,7 +503,7 @@ function EntityDescriptions.styler:Allay(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Axolotl(entity, context)
+function EntityInfo.styler:Axolotl(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -523,8 +523,8 @@ function EntityDescriptions.styler:Axolotl(entity, context)
                 Style:setLabel(variantId, "Axolotl (" .. variant .. ")")
                 Style:setLabel(entity, "Axolotl (" .. variant .. ")")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/Axolotl" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Axolotl" .. variant .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/Axolotl" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Axolotl" .. variant .. ".png")
             end
         end
 
@@ -546,15 +546,15 @@ function EntityDescriptions.styler:Axolotl(entity, context)
                 Style:setLabel(variantId, "Axolotl (" .. variant .. ")")
                 Style:setLabel(entity, "Axolotl (" .. variant .. ")")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/Axolotl" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Axolotl" .. variant .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/Axolotl" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Axolotl" .. variant .. ".png")
             end
         end
 
     end
 end
 
-function EntityDescriptions.styler:Bat(entity, context)
+function EntityInfo.styler:Bat(entity, context)
 
     if(entity:contains("BatFlags", TYPE.BYTE)) then
 
@@ -566,7 +566,7 @@ function EntityDescriptions.styler:Bat(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Bee(entity, context)
+function EntityInfo.styler:Bee(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -608,7 +608,7 @@ function EntityDescriptions.styler:Bee(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Cat(entity, context) 
+function EntityInfo.styler:Cat(entity, context) 
 
     if(context.edition == EDITION.JAVA) then
 
@@ -637,8 +637,8 @@ function EntityDescriptions.styler:Cat(entity, context)
 
                 variant = string.gsub(variant, "%s+", "")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/Cat" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Cat" .. variant .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/Cat" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Cat" .. variant .. ".png")
             end
         end
         
@@ -676,8 +676,8 @@ function EntityDescriptions.styler:Cat(entity, context)
                 Style:setLabel(variantId, "Cat (" .. variant .. ")")
                 Style:setLabel(entity, "Cat (" .. variant .. ")")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/Cat" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Cat" .. variant .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/Cat" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Cat" .. variant .. ".png")
             end
         end
 
@@ -695,7 +695,7 @@ function EntityDescriptions.styler:Cat(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Chicken(entity, context)
+function EntityInfo.styler:Chicken(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
@@ -727,7 +727,7 @@ function EntityDescriptions.styler:Chicken(entity, context)
 
 end
 
-function EntityDescriptions.styler:Creeper(entity, context)
+function EntityInfo.styler:Creeper(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
@@ -742,7 +742,7 @@ function EntityDescriptions.styler:Creeper(entity, context)
 
             if(powered.value == 1) then
                 Style:setLabel(entity, "Charged Creeper")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/ChargedCreeper.png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/ChargedCreeper.png")
             end
         end
 
@@ -755,7 +755,7 @@ function EntityDescriptions.styler:Creeper(entity, context)
             for i=0, definitions.childCount-1 do
                 if(definitions:child(i).value == "+minecraft:charged_creeper") then 
                     Style:setLabel(entity, "Charged Creeper")
-                    Style:setIcon(entity, "EntityDescriptions/images/entity_specific/ChargedCreeper.png")
+                    Style:setIcon(entity, "EntityInfo/images/entity_specific/ChargedCreeper.png")
                     break
                 end
             end
@@ -763,7 +763,7 @@ function EntityDescriptions.styler:Creeper(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Dolphin(entity, context)
+function EntityInfo.styler:Dolphin(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
@@ -775,7 +775,7 @@ function EntityDescriptions.styler:Dolphin(entity, context)
     end
 end
 
-function EntityDescriptions.styler:EnderDragon(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
+function EntityInfo.styler:EnderDragon(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -799,7 +799,7 @@ function EntityDescriptions.styler:EnderDragon(entity, context) -- UNVERIFIED (M
 
 end
 
-function EntityDescriptions.styler:Endermite(entity, context)
+function EntityInfo.styler:Endermite(entity, context)
 
     if(entity:contains("Lifetime", TYPE.INT)) then -- All platforms handle this the same <3
 
@@ -808,7 +808,7 @@ function EntityDescriptions.styler:Endermite(entity, context)
     end
 end
 
-function EntityDescriptions.styler:EvocationIllager(entity, context)
+function EntityInfo.styler:EvocationIllager(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
@@ -822,7 +822,7 @@ function EntityDescriptions.styler:EvocationIllager(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Fox(entity, context)
+function EntityInfo.styler:Fox(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -839,8 +839,8 @@ function EntityDescriptions.styler:Fox(entity, context)
                 Style:setLabel(variantId, "Fox (" .. variant .. ")")
                 Style:setLabel(entity, "Fox (" .. variant .. ")")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/Fox" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Fox" .. variant .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/Fox" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Fox" .. variant .. ".png")
             end
         end
 
@@ -859,14 +859,14 @@ function EntityDescriptions.styler:Fox(entity, context)
                 Style:setLabel(variantId, "Fox (" .. variant .. ")")
                 Style:setLabel(entity, "Fox (" .. variant .. ")")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/Fox" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Fox" .. variant .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/Fox" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Fox" .. variant .. ".png")
             end
         end
     end
 end
 
-function EntityDescriptions.styler:Frog(entity, context)
+function EntityInfo.styler:Frog(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -884,8 +884,8 @@ function EntityDescriptions.styler:Frog(entity, context)
                 Style:setLabel(variantId, "Frog (" .. variant .. ")")
                 Style:setLabel(entity, "Frog (" .. variant .. ")")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/Frog" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Frog" .. variant .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/Frog" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Frog" .. variant .. ".png")
             end
         end
 
@@ -905,14 +905,14 @@ function EntityDescriptions.styler:Frog(entity, context)
                 Style:setLabel(variantId, "Frog (" .. variant .. ")")
                 Style:setLabel(entity, "Frog (" .. variant .. ")")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/Frog" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Frog" .. variant .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/Frog" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Frog" .. variant .. ".png")
             end
         end
     end
 end
 
-function EntityDescriptions.styler:GlowSquid(entity, context)
+function EntityInfo.styler:GlowSquid(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -927,14 +927,14 @@ function EntityDescriptions.styler:GlowSquid(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Hoglin(entity, context)
+function EntityInfo.styler:Hoglin(entity, context)
 
     if(context.edition == EDITION.JAVA) then
         if(entity:contains("TimeInOverworld", TYPE.INT) and entity.lastFound.value > 0) then Style:setLabel(ticks, "Converts to a Zoglin in " .. self:ticksToTime(300 - entity.lastFound.value)) end
     end
 end
 
-function EntityDescriptions.styler:Horse(entity, context)
+function EntityInfo.styler:Horse(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -970,8 +970,8 @@ function EntityDescriptions.styler:Horse(entity, context)
             Style:setLabel(variant, color .. " & " .. pattern)
             Style:setLabel(entity, "Horse (" .. color .. ")")
 
-            Style:setIcon(variant, "EntityDescriptions/images/entity_specific/" .. icon .. ".png")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/" .. icon .. ".png")
+            Style:setIcon(variant, "EntityInfo/images/entity_specific/" .. icon .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/" .. icon .. ".png")
 
             
         end
@@ -997,8 +997,8 @@ function EntityDescriptions.styler:Horse(entity, context)
 
                 icon = "Horse" .. string.gsub(variant, "%s+", "")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/" .. icon .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/" .. icon .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/" .. icon .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/" .. icon .. ".png")
             end
         end
 
@@ -1043,9 +1043,9 @@ function EntityDescriptions.styler:Horse(entity, context)
 
             if(icon ~= "") then 
                 Style:setLabel(entity, typeStr)
-                Style:setIcon(entity, "EntityDescriptions/images/entities/" .. icon .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entities/" .. icon .. ".png")
                 Style:setLabel(typeNum, typeStr)
-                Style:setIcon(typeNum, "EntityDescriptions/images/entities/" .. icon .. ".png")
+                Style:setIcon(typeNum, "EntityInfo/images/entities/" .. icon .. ".png")
             end
         end
 
@@ -1081,13 +1081,13 @@ function EntityDescriptions.styler:Horse(entity, context)
             Style:setLabel(variant, color .. " & " .. pattern)
             Style:setLabel(entity, "Horse (" .. color .. ")")
 
-            Style:setIcon(variant, "EntityDescriptions/images/entity_specific/" .. icon .. ".png")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/" .. icon .. ".png")
+            Style:setIcon(variant, "EntityInfo/images/entity_specific/" .. icon .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/" .. icon .. ".png")
         end
     end
 end
 
-function EntityDescriptions.styler:Illusioner(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
+function EntityInfo.styler:Illusioner(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
@@ -1101,7 +1101,7 @@ function EntityDescriptions.styler:Illusioner(entity, context) -- UNVERIFIED (MI
     end
 end
 
-function EntityDescriptions.styler:Llama(entity, context)
+function EntityInfo.styler:Llama(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.BEDROCK) then
 
@@ -1127,14 +1127,14 @@ function EntityDescriptions.styler:Llama(entity, context)
                 Style:setLabel(variantId, "Llama (" .. variant .. ")")
                 Style:setLabel(entity, "Llama (" .. variant .. ")")
 
-                Style:setIcon(variantId, "EntityDescriptions/images/entity_specific/Llama" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Llama" .. variant .. ".png")
+                Style:setIcon(variantId, "EntityInfo/images/entity_specific/Llama" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Llama" .. variant .. ".png")
             end
         end
     end
 end
 
-function EntityDescriptions.styler:TraderLlama(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
+function EntityInfo.styler:TraderLlama(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1150,7 +1150,7 @@ function EntityDescriptions.styler:TraderLlama(entity, context) -- UNVERIFIED (M
     end
 end
 
-function EntityDescriptions.styler:MagmaCube(entity, context)
+function EntityInfo.styler:MagmaCube(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1210,7 +1210,7 @@ function EntityDescriptions.styler:MagmaCube(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Mooshroom(entity, context)
+function EntityInfo.styler:Mooshroom(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1228,7 +1228,7 @@ function EntityDescriptions.styler:Mooshroom(entity, context)
 
                 effectName = effectName:gsub("[^%w]+", "")
 
-                Style:setIcon(effectId, "EntityDescriptions/images/effects/" .. effectName .. ".png")
+                Style:setIcon(effectId, "EntityInfo/images/effects/" .. effectName .. ".png")
             end
 
         end
@@ -1253,8 +1253,8 @@ function EntityDescriptions.styler:Mooshroom(entity, context)
                 Style:setLabel(entity, "Mooshroom (" .. varStr .. ")")
                 Style:setLabel(variant, varStr)
 
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Mooshroom" .. varStr .. ".png")
-                Style:setIcon(variant, "EntityDescriptions/images/entity_specific/Mooshroom" .. varStr .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Mooshroom" .. varStr .. ".png")
+                Style:setIcon(variant, "EntityInfo/images/entity_specific/Mooshroom" .. varStr .. ".png")
             end
 
         end
@@ -1274,8 +1274,8 @@ function EntityDescriptions.styler:Mooshroom(entity, context)
                 Style:setLabel(entity, "Mooshroom (" .. varStr .. ")")
                 Style:setLabel(variant, varStr)
 
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Mooshroom" .. varStr .. ".png")
-                Style:setIcon(variant, "EntityDescriptions/images/entity_specific/Mooshroom" .. varStr .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Mooshroom" .. varStr .. ".png")
+                Style:setIcon(variant, "EntityInfo/images/entity_specific/Mooshroom" .. varStr .. ".png")
             end
 
         end
@@ -1305,13 +1305,13 @@ function EntityDescriptions.styler:Mooshroom(entity, context)
 
                 effectName = effectName:gsub("[^%w]+", "")
 
-                Style:setIcon(brokenEffectId, "EntityDescriptions/images/effects/" .. effectName .. ".png")
+                Style:setIcon(brokenEffectId, "EntityInfo/images/effects/" .. effectName .. ".png")
             end
         end
     end
 end
 
-function EntityDescriptions.styler:Panda(entity, context)
+function EntityInfo.styler:Panda(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1337,19 +1337,19 @@ function EntityDescriptions.styler:Panda(entity, context)
             if(entity:contains("MainGene", TYPE.STRING)) then
                 mainGene = entity.lastFound
                 mainGene.formattedName = formatGenes(mainGene.value)
-                Style:setIcon(mainGene, "EntityDescriptions/images/entity_specific/Panda" .. mainGene.formattedName .. ".png")
+                Style:setIcon(mainGene, "EntityInfo/images/entity_specific/Panda" .. mainGene.formattedName .. ".png")
             end
             if(entity:contains("HiddenGene", TYPE.STRING)) then
                 hiddenGene = entity.lastFound
                 hiddenGene.formattedName = formatGenes(hiddenGene.value)
-                Style:setIcon(hiddenGene, "EntityDescriptions/images/entity_specific/Panda" .. hiddenGene.formattedName .. ".png")
+                Style:setIcon(hiddenGene, "EntityInfo/images/entity_specific/Panda" .. hiddenGene.formattedName .. ".png")
             end
             if((mainGene.formattedName == "Normal" or mainGene.formattedName == "Aggressive" or mainGene.formattedName == "Lazy" or mainGene.formattedName == "Worried" or mainGene.formattedName == "Playful") or (hiddenGene.formattedName == mainGene.formattedName)) then
                 Style:setLabel(entity, mainGene.formattedName)
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Panda" .. mainGene.formattedName .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Panda" .. mainGene.formattedName .. ".png")
             else
                 Style:setLabel(entity, "Normal")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/PandaNormal.png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/PandaNormal.png")
             end
         end
 
@@ -1383,13 +1383,13 @@ function EntityDescriptions.styler:Panda(entity, context)
                 local gene = genes.lastFound
                 gene.formattedName = formatGenes(gene.value)
                 Style:setLabel(gene, gene.formattedName)
-                Style:setIcon(gene, "EntityDescriptions/images/entity_specific/Panda" .. gene.formattedName .. ".png")
+                Style:setIcon(gene, "EntityInfo/images/entity_specific/Panda" .. gene.formattedName .. ".png")
             end
             if(genes:contains("MainAllele", TYPE.INT)) then
                 local gene = genes.lastFound
                 gene.formattedName = formatGenes(gene.value)
                 Style:setLabel(gene, gene.formattedName)
-                Style:setIcon(gene, "EntityDescriptions/images/entity_specific/Panda" .. gene.formattedName .. ".png")
+                Style:setIcon(gene, "EntityInfo/images/entity_specific/Panda" .. gene.formattedName .. ".png")
             end
         end
 
@@ -1406,14 +1406,14 @@ function EntityDescriptions.styler:Panda(entity, context)
             end
 
             Style:setLabel(gene, gene.formattedName)
-            Style:setIcon(gene, "EntityDescriptions/images/entity_specific/Panda" .. gene.formattedName .. ".png")
+            Style:setIcon(gene, "EntityInfo/images/entity_specific/Panda" .. gene.formattedName .. ".png")
             Style:setLabel(entity, gene.formattedName)
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Panda" .. gene.formattedName .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/Panda" .. gene.formattedName .. ".png")
         end
     end
 end
 
-function EntityDescriptions.styler:Parrot(entity, context)
+function EntityInfo.styler:Parrot(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.BEDROCK or context.edition == EDITION.CONSOLE) then
 
@@ -1432,15 +1432,15 @@ function EntityDescriptions.styler:Parrot(entity, context)
                 Style:setLabel(variantTag, "Parrot (" .. variant .. ")")
                 Style:setLabel(entity, "Parrot (" .. variant .. ")")
 
-                Style:setIcon(variantTag, "EntityDescriptions/images/entity_specific/Parrot" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Parrot" .. variant .. ".png")
+                Style:setIcon(variantTag, "EntityInfo/images/entity_specific/Parrot" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Parrot" .. variant .. ".png")
             end
         end
     elseif(context.edition == EDITION.CONSOLE) then
     end
 end
 
-function EntityDescriptions.styler:Phantom(entity, context)
+function EntityInfo.styler:Phantom(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
         local x, y, z = nil
@@ -1454,7 +1454,7 @@ function EntityDescriptions.styler:Phantom(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Piglin(entity, context)
+function EntityInfo.styler:Piglin(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1464,7 +1464,7 @@ function EntityDescriptions.styler:Piglin(entity, context)
     end
 end
 
-function EntityDescriptions.styler:PiglinBrute(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
+function EntityInfo.styler:PiglinBrute(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1473,7 +1473,7 @@ function EntityDescriptions.styler:PiglinBrute(entity, context) -- UNVERIFIED (M
     end
 end
 
-function EntityDescriptions.styler:Pufferfish(entity, context)
+function EntityInfo.styler:Pufferfish(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1505,13 +1505,13 @@ function EntityDescriptions.styler:Pufferfish(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Rabbit(entity, context)
+function EntityInfo.styler:Rabbit(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
         if(self:getCustomNameJava(entity) == "Toast") then
             Style:setLabel(entity, "Rabbit (Toast)")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/RabbitToast.png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/RabbitToast.png")
         elseif(entity:contains("RabbitType", TYPE.INT)) then
             local rabbitType = entity.lastFound
             local variant = ""
@@ -1531,8 +1531,8 @@ function EntityDescriptions.styler:Rabbit(entity, context)
     
                 variant = string.gsub(variant, "%s+", "")
 
-                Style:setIcon(rabbitType, "EntityDescriptions/images/entity_specific/Rabbit" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Rabbit" .. variant .. ".png")
+                Style:setIcon(rabbitType, "EntityInfo/images/entity_specific/Rabbit" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Rabbit" .. variant .. ".png")
             end
         end
 
@@ -1540,7 +1540,7 @@ function EntityDescriptions.styler:Rabbit(entity, context)
 
         if(entity:contains("CustomName", TYPE.STRING) and entity.lastFound.value == "Toast") then
             Style:setLabel(entity, "Rabbit (Toast)")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/RabbitToast.png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/RabbitToast.png")
         elseif(entity:contains("Variant", TYPE.INT)) then
             local rabbitType = entity.lastFound
             local variant = ""
@@ -1559,8 +1559,8 @@ function EntityDescriptions.styler:Rabbit(entity, context)
     
                 variant = string.gsub(variant, "%s+", "")
 
-                Style:setIcon(rabbitType, "EntityDescriptions/images/entity_specific/Rabbit" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Rabbit" .. variant .. ".png")
+                Style:setIcon(rabbitType, "EntityInfo/images/entity_specific/Rabbit" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Rabbit" .. variant .. ".png")
             end
         end
 
@@ -1568,7 +1568,7 @@ function EntityDescriptions.styler:Rabbit(entity, context)
 
         if(entity:contains("CustomName", TYPE.STRING) and entity.lastFound.value == "Toast") then
             Style:setLabel(entity, "Rabbit (Toast)")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/RabbitToast.png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/RabbitToast.png")
         elseif(entity:contains("RabbitType", TYPE.INT)) then
             local rabbitType = entity.lastFound
             local variant = ""
@@ -1588,15 +1588,15 @@ function EntityDescriptions.styler:Rabbit(entity, context)
     
                 variant = string.gsub(variant, "%s+", "")
 
-                Style:setIcon(rabbitType, "EntityDescriptions/images/entity_specific/Rabbit" .. variant .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Rabbit" .. variant .. ".png")
+                Style:setIcon(rabbitType, "EntityInfo/images/entity_specific/Rabbit" .. variant .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Rabbit" .. variant .. ".png")
             end
         end
 
     end
 end
 
-function EntityDescriptions.styler:Ravager(entity, context)
+function EntityInfo.styler:Ravager(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1612,7 +1612,7 @@ function EntityDescriptions.styler:Ravager(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Sheep(entity, context)
+function EntityInfo.styler:Sheep(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.BEDROCK or context.edition == EDITION.CONSOLE) then
 
@@ -1627,14 +1627,14 @@ function EntityDescriptions.styler:Sheep(entity, context)
     
                 colorStr = string.gsub(colorStr, "%s+", "")
 
-                Style:setIcon(entity.lastFound, "EntityDescriptions/images/entity_specific/Sheep" .. colorStr .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Sheep" .. colorStr .. ".png")
+                Style:setIcon(entity.lastFound, "EntityInfo/images/entity_specific/Sheep" .. colorStr .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Sheep" .. colorStr .. ".png")
             end
         end
     end
 end
 
-function EntityDescriptions.styler:Shulker(entity, context)
+function EntityInfo.styler:Shulker(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
@@ -1649,8 +1649,8 @@ function EntityDescriptions.styler:Shulker(entity, context)
     
                 colorStr = string.gsub(colorStr, "%s+", "")
 
-                Style:setIcon(entity.lastFound, "EntityDescriptions/images/entity_specific/Shulker" .. colorStr .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Shulker" .. colorStr .. ".png")
+                Style:setIcon(entity.lastFound, "EntityInfo/images/entity_specific/Shulker" .. colorStr .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Shulker" .. colorStr .. ".png")
             end
         end
 
@@ -1684,15 +1684,15 @@ function EntityDescriptions.styler:Shulker(entity, context)
     
                 colorStr = string.gsub(colorStr, "%s+", "")
 
-                Style:setIcon(entity.lastFound, "EntityDescriptions/images/entity_specific/Shulker" .. colorStr .. ".png")
-                Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Shulker" .. colorStr .. ".png")
+                Style:setIcon(entity.lastFound, "EntityInfo/images/entity_specific/Shulker" .. colorStr .. ".png")
+                Style:setIcon(entity, "EntityInfo/images/entity_specific/Shulker" .. colorStr .. ".png")
             end
         end
 
     end
 end
 
-function EntityDescriptions.styler:Skeleton(entity, context)
+function EntityInfo.styler:Skeleton(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1706,7 +1706,7 @@ function EntityDescriptions.styler:Skeleton(entity, context)
     end
 end
 
-function EntityDescriptions.styler:SkeletonHorse(entity, context)
+function EntityInfo.styler:SkeletonHorse(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
@@ -1736,7 +1736,7 @@ function EntityDescriptions.styler:SkeletonHorse(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Slime(entity, context)
+function EntityInfo.styler:Slime(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
@@ -1774,7 +1774,7 @@ function EntityDescriptions.styler:Slime(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Tadpole(entity, context)
+function EntityInfo.styler:Tadpole(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1793,7 +1793,7 @@ function EntityDescriptions.styler:Tadpole(entity, context)
     end
 end
 
-function EntityDescriptions.styler:TropicalFish(entity, context) -- missing console
+function EntityInfo.styler:TropicalFish(entity, context) -- missing console
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1890,7 +1890,7 @@ function EntityDescriptions.styler:TropicalFish(entity, context) -- missing cons
     end
 end
 
-function EntityDescriptions.styler:Wither(entity, context)
+function EntityInfo.styler:Wither(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then 
         
@@ -1905,7 +1905,7 @@ function EntityDescriptions.styler:Wither(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Wolf(entity, context) 
+function EntityInfo.styler:Wolf(entity, context) 
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
         
@@ -1932,7 +1932,7 @@ function EntityDescriptions.styler:Wolf(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Zoglin(entity, context)
+function EntityInfo.styler:Zoglin(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1964,7 +1964,7 @@ function EntityDescriptions.styler:Zoglin(entity, context)
     end
 end
 
-function EntityDescriptions.styler:Villager(entity, context)
+function EntityInfo.styler:Villager(entity, context)
 
     if(context.edition == EDITION.JAVA) then
         local id = ""
@@ -2000,7 +2000,7 @@ function EntityDescriptions.styler:Villager(entity, context)
 
         if(jobEntry ~= nil and jobEntry.valid) then
             Style:setLabel(entity, "Villager (" .. vType .. jobEntry.name .. ")")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Villager" .. jobEntry.name .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/Villager" .. jobEntry.name .. ".png")
         elseif(vType ~= "") then
             Style:setLabel(entity, "Villager (" .. vType:sub(1, -2) .. ")")
         end
@@ -2055,7 +2055,7 @@ function EntityDescriptions.styler:Villager(entity, context)
 
         if(jobEntry ~= nil and jobEntry.valid) then
             Style:setLabel(entity, "Villager (" .. vType .. jobEntry.name .. ")")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Villager" .. jobEntry.name .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/Villager" .. jobEntry.name .. ".png")
         elseif(vType ~= "") then
             Style:setLabel(entity, "Villager (" .. vType:sub(1, -2) .. ")")end
     elseif(context.edition == EDITION.CONSOLE) then
@@ -2069,12 +2069,12 @@ function EntityDescriptions.styler:Villager(entity, context)
 
         if(jobEntry ~= nil and jobEntry.valid) then
             Style:setLabel(entity, "Villager (" .. jobEntry.name .. ")")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/Villager" .. jobEntry.name .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/Villager" .. jobEntry.name .. ".png")
         end
     end
 end
 
-function EntityDescriptions.styler:ZombieVillager(entity, context)
+function EntityInfo.styler:ZombieVillager(entity, context)
 
     if(context.edition == EDITION.JAVA) then
         local id = ""
@@ -2110,7 +2110,7 @@ function EntityDescriptions.styler:ZombieVillager(entity, context)
 
         if(jobEntry ~= nil and jobEntry.valid) then
             Style:setLabel(entity, "Zombie Villager (" .. vType .. jobEntry.name .. ")")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/ZombieVillager" .. jobEntry.name .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/ZombieVillager" .. jobEntry.name .. ".png")
         elseif(vType ~= "") then
             Style:setLabel(entity, "Zombie Villager (" .. vType:sub(1, -2) .. ")")
         end
@@ -2163,7 +2163,7 @@ function EntityDescriptions.styler:ZombieVillager(entity, context)
 
         if(jobEntry ~= nil and jobEntry.valid) then
             Style:setLabel(entity, "Zombie Villager (" .. vType .. jobEntry.name .. ")")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/ZombieVillager" .. jobEntry.name .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/ZombieVillager" .. jobEntry.name .. ".png")
         elseif(vType ~= "") then
             Style:setLabel(entity, "Zombie Villager (" .. vType:sub(1, -2) .. ")")
         end
@@ -2178,9 +2178,9 @@ function EntityDescriptions.styler:ZombieVillager(entity, context)
 
         if(jobEntry ~= nil and jobEntry.valid) then
             Style:setLabel(entity, "Zombie Villager (" .. jobEntry.name .. ")")
-            Style:setIcon(entity, "EntityDescriptions/images/entity_specific/ZombieVillager" .. jobEntry.name .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/ZombieVillager" .. jobEntry.name .. ".png")
         end
     end
 end
 
-return EntityDescriptions
+return EntityInfo
