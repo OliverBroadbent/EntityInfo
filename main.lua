@@ -151,6 +151,10 @@ function EntityInfo.styler:recursion(root, target, context)
     elseif(context.edition == EDITION.BEDROCK) then
         if(target.type == TYPE.LIST and target.listType == TYPE.COMPOUND and (target.name == "Entities" or target.name == "Actors")) then
             for i = 0, target.childCount-1 do self:ProcessEntity(target:child(i), context) end
+        elseif(target.type == TYPE.LIST and target.listType == TYPE.COMPOUND and target.name == "Occupants") then -- bees in beehives
+            for i = 0, target.childCount-1 do local temp1 = target:child(i)
+                if(temp1:contains("SaveData", TYPE.COMPOUND)) then self:ProcessEntity(temp1.lastFound, context) end
+            end
         end
     elseif(context.edition == EDITION.CONSOLE) then
         if(target.type == TYPE.LIST and target.listType == TYPE.COMPOUND and (target.name == "Entities" or target.name == "Riding")) then
