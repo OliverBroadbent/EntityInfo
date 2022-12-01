@@ -617,6 +617,35 @@ function EntityInfo.styler:Bee(entity, context)
     end
 end
 
+function EntityInfo.styler:Boat(entity, context)
+
+    if(entity:contains("Type",TYPE.STRING)) then
+        local typeId = entity.lastFound
+        local typeName = ""
+
+        if(typeId.value == "oak") then typeName = "Oak"
+        elseif(typeId.value == "spruce") then typeName = "Spruce"
+        elseif(typeId.value == "birch") then typeName = "Birch"
+        elseif(typeId.value == "jungle") then typeName = "Jungle"
+        elseif(typeId.value == "acacia") then typeName = "Acacia"
+        elseif(typeId.value == "dark_oak") then typeName = "Dark Oak"
+        elseif(typeId.value == "mangrove") then typeName = "Mangrove"
+        elseif(typeId.value == "bamboo") then typeName = "Bamboo"
+        end
+        
+        if(typeName ~= "") then
+            Style:setLabel(typeId, "Boat (" .. typeName .. ")")
+            Style:setLabel(entity, "Boat (" .. typeName .. ")")
+
+            typeName = string.gsub(typeName, "%s+", "")
+
+            Style:setIcon(typeId, "EntityInfo/images/entity_specific/Boat" .. typeName .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/Boat" .. typeName .. ".png")
+        end
+    end
+
+end
+
 function EntityInfo.styler:Cat(entity, context) 
 
     if(context.edition == EDITION.JAVA) then
@@ -702,6 +731,35 @@ function EntityInfo.styler:Cat(entity, context)
 
     elseif(context.edition == EDITION.CONSOLE) then
     end
+end
+
+function EntityInfo.styler:ChestBoat(entity, context)
+
+    if(entity:contains("Type",TYPE.STRING)) then
+        local typeId = entity.lastFound
+        local typeName = ""
+
+        if(typeId.value == "oak") then typeName = "Oak"
+        elseif(typeId.value == "spruce") then typeName = "Spruce"
+        elseif(typeId.value == "birch") then typeName = "Birch"
+        elseif(typeId.value == "jungle") then typeName = "Jungle"
+        elseif(typeId.value == "acacia") then typeName = "Acacia"
+        elseif(typeId.value == "dark_oak") then typeName = "Dark Oak"
+        elseif(typeId.value == "mangrove") then typeName = "Mangrove"
+        elseif(typeId.value == "bamboo") then typeName = "Bamboo"
+        end
+
+        if(typeName ~= "") then
+            Style:setLabel(typeId, "Chest Boat (" .. typeName .. ")")
+            Style:setLabel(entity, "Chest Boat (" .. typeName .. ")")
+
+            typeName = string.gsub(typeName, "%s+", "")
+
+            Style:setIcon(typeId, "EntityInfo/images/entity_specific/ChestBoat" .. typeName .. ".png")
+            Style:setIcon(entity, "EntityInfo/images/entity_specific/ChestBoat" .. typeName .. ".png")
+        end
+    end
+
 end
 
 function EntityInfo.styler:Chicken(entity, context)
