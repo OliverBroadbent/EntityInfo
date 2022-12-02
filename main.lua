@@ -125,7 +125,9 @@ function EntityInfo.styler:main(root, context)
             context.version = root.lastFound.value
         end
     end
-    if((context.type & FILE_TYPE.PLAYER) ~= 0) then self:ProcessEntity(root, context) end
+    if((context.type & FILE_TYPE.PLAYER) ~= 0 or (context.type & FILE_TYPE.LEVEL) ~= 0) then
+        self:ProcessEntity(root, context)
+    end
 end
 
 function EntityInfo.styler:recursion(root, target, context)
@@ -175,6 +177,12 @@ function EntityInfo.styler:recursion(root, target, context)
 end
 
 function EntityInfo.styler:ProcessEntity(entity, context)
+    -- level.dat player check
+    if(entity:contains("Data", TYPE.COMPOUND)) then
+        local dataTag = entity.lastFound
+        if(dataTag:contains("Player", TYPE.COMPOUND)) then entity = dataTag.lastFound end
+    end
+
     self:NameAndIcon(entity, context)
     self:Position(entity, context)
     self:Rotation(entity, context)
@@ -185,6 +193,7 @@ function EntityInfo.styler:ProcessEntity(entity, context)
     self:PortalCooldown(entity, context)
     self:ActiveEffects(entity, context)
     self:Attributes(entity, context)
+    self:AbsorptionAmount(entity, context)
 
     self:RunEntitySpecifics(entity, context)
 end
@@ -454,6 +463,18 @@ function EntityInfo.styler:Attributes(entity, context)
                 end
             end
         end
+    end
+end
+
+function EntityInfo.styler:AbsorptionAmount(entity, context)
+
+    if(entity:contains("AbsorptionAmount", TYPE.FLOAT)) then
+        local extraHealth = entity.lastFound
+
+        if(extraHealth.value > 0) then
+            Style:setLabel(extraHealth, string.gsub(string.format("%.1f", extraHealth.value/2), "%.0", "") .. " Hearts")
+            Style:setIcon(extraHealth, "EntityInfo/images/ExtraHealth.png")
+        end 
     end
 end
 

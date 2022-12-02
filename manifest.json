@@ -1,7 +1,7 @@
 {
   "link" : "https://github.com/OliverBroadbent/EntityInfo",
   "name" : "Entity Info",
-  "version" : 4,
+  "version" : 5,
   "author" : "Broadbent",
   "description" : "Displays icons, names, and tag descriptions for entities.",
   "editions" : ["JAVA", "BEDROCK", "CONSOLE"],
