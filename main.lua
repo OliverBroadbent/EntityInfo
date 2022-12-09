@@ -608,7 +608,7 @@ function EntityInfo.styler:Axolotl(entity, context)
 
             if(variant ~= "") then
                 entity.info.meta = variant
-                entity.info.iconPath = variant
+                entity.info.iconPath = "Axolotl/" .. variant
 
                 Style:setLabel(variantId, variant)
                 Style:setIcon(variantId, "EntityInfo/Images/Axolotl/" .. variant .. ".png")
@@ -725,7 +725,9 @@ end
 
 function EntityInfo.styler:Boat(entity, context)
 
-    if(entity:contains("Type",TYPE.STRING)) then
+    if(context.edition == EDITION.JAVA) then
+        
+        if(entity:contains("Type",TYPE.STRING)) then
         local typeId = entity.lastFound
         local typeName = ""
 
@@ -738,7 +740,7 @@ function EntityInfo.styler:Boat(entity, context)
         elseif(typeId.value == "mangrove") then typeName = "Mangrove"
         elseif(typeId.value == "bamboo") then typeName = "Bamboo"
         end
-        
+
         if(typeName ~= "") then
             entity.info.meta = typeName
             Style:setLabel(typeId, typeName)
@@ -748,6 +750,9 @@ function EntityInfo.styler:Boat(entity, context)
             entity.info.iconPath = "Boat/" .. typeName
             Style:setIcon(typeId, "EntityInfo/Images/Boat/" .. typeName .. ".png")
         end
+    end
+    elseif(context.edition == EDITION.BEDROCK) then
+
     end
 end
 
@@ -836,7 +841,9 @@ end
 
 function EntityInfo.styler:ChestBoat(entity, context)
 
-    if(entity:contains("Type",TYPE.STRING)) then
+    if(context.edition == EDITION.JAVA) then
+
+        if(entity:contains("Type",TYPE.STRING)) then
         local typeId = entity.lastFound
         local typeName = ""
 
@@ -859,6 +866,9 @@ function EntityInfo.styler:ChestBoat(entity, context)
             entity.info.iconPath = "ChestBoat/" .. typeName
             Style:setIcon(typeId, "EntityInfo/Images/ChestBoat/" .. typeName .. ".png")
         end
+    end
+    elseif(context.edition == EDITION.BEDROCK) then
+
     end
 end
 
