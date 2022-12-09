@@ -890,6 +890,20 @@ function EntityInfo.styler:Chicken(entity, context)
     end
 end
 
+function EntityInfo.styler:CommandBlockMinecart(entity, context)
+
+    if(context.edition == EDITION.JAVA or context.edition == EDITION.BEDROCK) then
+
+        if(entity:contains("Command", TYPE.STRING)) then
+            local command = entity.lastFound.value
+
+            if(command ~= "") then
+                entity.info.meta = command:gsub("(.)%s.*$","%1")
+            end
+        end
+    end
+end
+
 function EntityInfo.styler:Creeper(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
@@ -1161,7 +1175,7 @@ function EntityInfo.styler:Horse(entity, context)
             entity.info.meta = color
             Style:setLabel(variant, color .. " & " .. pattern)
 
-            color = "Horse" .. string.gsub(color, "%s+", "")
+            color = string.gsub(color, "%s+", "")
 
             entity.info.iconPath = "Horse/" .. color
             Style:setIcon(variant, "EntityInfo/Images/Horse/" .. color .. ".png")
@@ -1278,7 +1292,6 @@ end
 function EntityInfo.styler:Illusioner(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
-        Print("911")
         if(entity:contains("SpellTicks", TYPE.INT)) then 
             local ticks = entity.lastFound.value
             local text = ""
@@ -1520,10 +1533,10 @@ function EntityInfo.styler:Panda(entity, context)
             end
             if((mainGene.formattedName == "Normal" or mainGene.formattedName == "Aggressive" or mainGene.formattedName == "Lazy" or mainGene.formattedName == "Worried" or mainGene.formattedName == "Playful") or (hiddenGene.formattedName == mainGene.formattedName)) then
                 entity.info.meta = mainGene.formattedName
-                entity.info.iconPath = "Images/Panda/" .. mainGene.formattedName
+                entity.info.iconPath = "Panda/" .. mainGene.formattedName
             else
                 entity.info.meta = "Normal"
-                entity.info.iconPath = "Images/Panda/Normal.png"
+                entity.info.iconPath = "Panda/Normal.png"
             end
         end
 
@@ -1582,7 +1595,7 @@ function EntityInfo.styler:Panda(entity, context)
             Style:setLabel(gene, gene.formattedName)
             Style:setIcon(gene, "EntityInfo/Images/Panda/" .. gene.formattedName .. ".png")
             entity.info.meta = gene.formattedName
-            entity.info.iconPath = "Images/Panda/" .. gene.formattedName
+            entity.info.iconPath = "Panda/" .. gene.formattedName
         end
     end
 end
@@ -1602,9 +1615,9 @@ function EntityInfo.styler:Parrot(entity, context)
     
         if(variant ~= "") then
             Style:setLabel(variantTag, "Parrot (" .. variant .. ")")
-            Style:setIcon(variantTag, "EntityInfo/images/entity_specific/Parrot" .. variant .. ".png")
+            Style:setIcon(variantTag, "EntityInfo/images/entity_specific/Parrot/" .. variant .. ".png")
             entity.info.meta = variant
-            entity.info.iconPath = "Images/Parrot/" .. variant
+            entity.info.iconPath = "Parrot/" .. variant
         end
     end
 end
@@ -1839,7 +1852,7 @@ function EntityInfo.styler:Sheep(entity, context)
 
             colorStr = string.gsub(colorStr, "%s+", "")
 
-            Style:setIcon(entity.lastFound, "EntityInfo/images/entity_specific/Sheep" .. colorStr .. ".png")
+            Style:setIcon(entity.lastFound, "EntityInfo/images/entity_specific/Sheep/" .. colorStr .. ".png")
             entity.info.iconPath = "Sheep/" .. colorStr
         end
     end
@@ -1860,7 +1873,7 @@ function EntityInfo.styler:Shulker(entity, context)
     
                 colorStr = string.gsub(colorStr, "%s+", "")
 
-                Style:setIcon(entity.lastFound, "EntityInfo/images/entity_specific/Shulker" .. colorStr .. ".png")
+                Style:setIcon(entity.lastFound, "EntityInfo/images/entity_specific/Shulker/" .. colorStr .. ".png")
                 entity.info.iconPath = "Sheep/" .. colorStr
             end
         end
@@ -1895,7 +1908,7 @@ function EntityInfo.styler:Shulker(entity, context)
     
                 colorStr = string.gsub(colorStr, "%s+", "")
 
-                Style:setIcon(entity.lastFound, "EntityInfo/images/entity_specific/Shulker" .. colorStr .. ".png")
+                Style:setIcon(entity.lastFound, "EntityInfo/images/entity_specific/Shulker/" .. colorStr .. ".png")
                 entity.info.iconPath = "Shulker/" .. colorStr
             end
         end
