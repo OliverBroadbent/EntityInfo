@@ -1542,6 +1542,29 @@ function EntityInfo.styler:Mooshroom(entity, context)
     end
 end
 
+function EntityInfo.styler:Ocelot(entity, context)
+
+    if((context.edition == EDITION.JAVA and EntityInfo.styler.version < 1907) or (context.edition == EDITION.CONSOLE)) then -- 18w44a
+        
+        if(entity:contains("CatType", TYPE.INT)) then
+            local id = entity.lastFound
+            local text = ""
+
+            if(id.value == 1) then text = "Tuxedo"
+            elseif(id.value == 2) then text = "Red"
+            elseif(id.value == 3) then text = "Siamese"
+            end
+
+            if(text ~= "") then
+                entity.info.meta = text
+                entity.info.iconPath = "Cat/" .. text
+                Style:setLabel(id, text)
+                Style:setIcon(id, "EntityInfo/Images/Cat/" .. text .. ".png")
+            end
+        end
+    end
+end
+
 function EntityInfo.styler:Panda(entity, context)
 
     if(context.edition == EDITION.JAVA) then
