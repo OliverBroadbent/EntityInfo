@@ -760,32 +760,64 @@ function EntityInfo.styler:Cat(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
-        if(entity:contains("variant", TYPE.STRING)) then
-            local variantId = entity.lastFound
-            local variant = ""
-
-            if(variantId.value == "all_black") then variant = "Black"
-            elseif(variantId.value == "black") then variant = "Tuxedo"
-            elseif(variantId.value == "british_shorthair") then variant = "British Shorthair"
-            elseif(variantId.value == "calico") then variant = "Calico"
-            elseif(variantId.value == "jellie") then variant = "Jellie"
-            elseif(variantId.value == "ocelot") then variant = "Ocelot"
-            elseif(variantId.value == "persian") then variant = "Persian"
-            elseif(variantId.value == "ragdoll") then variant = "Ragdoll"
-            elseif(variantId.value == "red") then variant = "Red"
-            elseif(variantId.value == "siamese") then variant = "Siamese"
-            elseif(variantId.value == "tabby") then variant = "Tabby"
-            elseif(variantId.value == "white") then variant = "White"
+        if(EntityInfo.styler.version < 3088) then
+            
+            if(entity:contains("CatType", TYPE.INT)) then
+                local variantId = entity.lastFound
+                local variant = ""
+    
+                if(variantId.value == 0) then variant = "Tabby"
+                elseif(variantId.value == 1) then variant = "Tuxedo"
+                elseif(variantId.value == 2) then variant = "Red"
+                elseif(variantId.value == 3) then variant = "Siamese"
+                elseif(variantId.value == 4) then variant = "British Shorthair"
+                elseif(variantId.value == 5) then variant = "Calico"
+                elseif(variantId.value == 6) then variant = "Persian"
+                elseif(variantId.value == 7) then variant = "Ragdoll"
+                elseif(variantId.value == 8) then variant = "White"
+                elseif(variantId.value == 9) then variant = "Jellie"
+                elseif(variantId.value == 10) then variant = "Black"
+                end
+    
+                if(variant ~= "") then
+                    entity.info.meta = variant
+                    Style:setLabel(variantId, variant)
+    
+                    variant = string.gsub(variant, "%s+", "")
+    
+                    entity.info.iconPath = "Cat/" .. variant
+                    Style:setIcon(variantId, "EntityInfo/Images/Cat/" .. variant .. ".png")
+                end
             end
 
-            if(variant ~= "") then
-                entity.info.meta = variant
-                Style:setLabel(variantId, variant)
+        else
+            if(entity:contains("variant", TYPE.STRING)) then
+                local variantId = entity.lastFound
+                local variant = ""
 
-                variant = string.gsub(variant, "%s+", "")
+                if(variantId.value == "minecraft:all_black") then variant = "Black"
+                elseif(variantId.value == "minecraft:black") then variant = "Tuxedo"
+                elseif(variantId.value == "minecraft:british_shorthair") then variant = "British Shorthair"
+                elseif(variantId.value == "minecraft:calico") then variant = "Calico"
+                elseif(variantId.value == "minecraft:jellie") then variant = "Jellie"
+                elseif(variantId.value == "minecraft:ocelot") then variant = "Ocelot" -- MIGHT NOT EXIST
+                elseif(variantId.value == "minecraft:persian") then variant = "Persian"
+                elseif(variantId.value == "minecraft:ragdoll") then variant = "Ragdoll"
+                elseif(variantId.value == "minecraft:red") then variant = "Red"
+                elseif(variantId.value == "minecraft:siamese") then variant = "Siamese"
+                elseif(variantId.value == "minecraft:tabby") then variant = "Tabby"
+                elseif(variantId.value == "minecraft:white") then variant = "White"
+                end
 
-                entity.info.iconPath = "Cat/" .. variant
-                Style:setIcon(variantId, "EntityInfo/Images/Cat/" .. variant .. ".png")
+                if(variant ~= "") then
+                    entity.info.meta = variant
+                    Style:setLabel(variantId, variant)
+
+                    variant = string.gsub(variant, "%s+", "")
+
+                    entity.info.iconPath = "Cat/" .. variant
+                    Style:setIcon(variantId, "EntityInfo/Images/Cat/" .. variant .. ".png")
+                end
             end
         end
         
