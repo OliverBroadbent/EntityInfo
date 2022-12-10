@@ -800,7 +800,6 @@ function EntityInfo.styler:Cat(entity, context)
                 elseif(variantId.value == "minecraft:british_shorthair") then variant = "British Shorthair"
                 elseif(variantId.value == "minecraft:calico") then variant = "Calico"
                 elseif(variantId.value == "minecraft:jellie") then variant = "Jellie"
-                elseif(variantId.value == "minecraft:ocelot") then variant = "Ocelot" -- MIGHT NOT EXIST
                 elseif(variantId.value == "minecraft:persian") then variant = "Persian"
                 elseif(variantId.value == "minecraft:ragdoll") then variant = "Ragdoll"
                 elseif(variantId.value == "minecraft:red") then variant = "Red"
