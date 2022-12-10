@@ -760,7 +760,7 @@ function EntityInfo.styler:Cat(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
-        if(EntityInfo.styler.version < 3088) then
+        if(EntityInfo.styler.version < 3088) then -- 22w14a
             
             if(entity:contains("CatType", TYPE.INT)) then
                 local variantId = entity.lastFound
