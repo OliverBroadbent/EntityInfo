@@ -1678,8 +1678,8 @@ function EntityInfo.styler:Parrot(entity, context)
         end
     
         if(variant ~= "") then
-            Style:setLabel(variantTag, "Parrot (" .. variant .. ")")
-            Style:setIcon(variantTag, "EntityInfo/images/entity_specific/Parrot/" .. variant .. ".png")
+            Style:setLabel(variantTag, variant)
+            Style:setIcon(variantTag, "EntityInfo/Images/Parrot/" .. variant .. ".png")
             entity.info.meta = variant
             entity.info.iconPath = "Parrot/" .. variant
         end
