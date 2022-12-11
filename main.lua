@@ -1009,7 +1009,7 @@ function EntityInfo.styler:Dolphin(entity, context)
     end
 end
 
-function EntityInfo.styler:EnderDragon(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
+function EntityInfo.styler:EnderDragon(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1330,7 +1330,7 @@ function EntityInfo.styler:Horse(entity, context)
     end
 end
 
-function EntityInfo.styler:Illusioner(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
+function EntityInfo.styler:Illusioner(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
         if(entity:contains("SpellTicks", TYPE.INT)) then 
@@ -1383,7 +1383,7 @@ function EntityInfo.styler:Llama(entity, context)
     end
 end
 
-function EntityInfo.styler:TraderLlama(entity, context) -- UNVERIFIED (MISSING IN DATABASE)
+function EntityInfo.styler:TraderLlama(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
