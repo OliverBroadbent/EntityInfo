@@ -1772,6 +1772,22 @@ function EntityInfo.styler:Phantom(entity, context)
     end
 end
 
+function EntityInfo.styler:Pig(entity, context)
+
+    if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
+        
+        if(entity:contains("Saddle", TYPE.BYTE) and entity.lastFound.value == 1) then
+            entity.info.meta = "Saddled"
+        end
+
+    elseif(context.edition == EDITION.BEDROCK) then
+        
+        if(entity:contains("Saddled", TYPE.BYTE) and entity.lastFound.value == 1) then
+            entity.info.meta = "Saddled"
+        end
+    end
+end
+
 function EntityInfo.styler:Piglin(entity, context)
 
     if(context.edition == EDITION.JAVA) then
