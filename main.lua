@@ -8,19 +8,19 @@ EntityInfo = {
 -- CUSTOM FUNCTIONS
 
 function EntityInfo.styler:ticksToTime(ticks)
-    local timeString = ""
+    local secs = ticks / 20
+    local mins = math.floor(secs / 60)
+    local hours = math.floor(mins / 60)
+    local days = math.floor(hours / 24)
 
-    local secs = ticks/20
-    local mins = (math.floor(secs))//60
-    local hours = mins//60
-    local days = hours//24
+    local text = ""
+    if days > 0 then text = text .. string.format("%d days, ", days) end
+    if hours > 0 then text = text .. string.format("%d hours, ", hours % 24) end
+    if mins > 0 then text = text .. string.format("%d minutes, ", mins % 60) end
+    if secs > 0 then text = text .. string.format("%d seconds", math.floor(secs % 60)) end
 
-    if(days > 0) then timeString = timeString .. tostring(days) .. " days, " end
-    if(hours > 0) then timeString = timeString .. tostring(hours%24) .. " hours, " end
-    if(mins > 0) then timeString = timeString .. tostring(mins%60) .. " minutes, " end
-    if(secs > 0) then timeString = timeString .. string.gsub(string.format("%.1f", math.abs(secs%60)), "%.0", "") .. " seconds" end
-
-    return timeString
+    text = string.gsub(text, ", $", "")
+    return text
 end
 
 function EntityInfo.styler:colorToString(color)
