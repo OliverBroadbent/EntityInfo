@@ -276,17 +276,19 @@ function EntityInfo.styler:Position(entity, context)
 
     if(context.edition == EDITION.BEDROCK) then listTypeCheck = TYPE.FLOAT end
     if(entity:contains("Pos", TYPE.LIST, listTypeCheck)) then
+        local pos = entity.lastFound
 
-        if(entity.lastFound.childCount == 3) then
-
-            local pos = entity.lastFound
-
-            Style:setLabelColor(pos, "#bfbfbf")
-            Style:setLabel(pos, "X:" .. tostring(math.floor(pos:child(0).value + 0.5)) .. ", Y:" .. tostring(math.floor(pos:child(1).value + 0.5)) .. ", Z:" .. tostring(math.floor(pos:child(2).value + 0.5)))
+        if(pos.childCount == 3) then
+            local x = math.floor(pos:child(0).value + 0.5)
+            local y = math.floor(pos:child(1).value + 0.5)
+            local z = math.floor(pos:child(2).value + 0.5)
+            local label = string.format("X:%d, Y:%d, Z:%d", x, y, z)
+            Style:setLabel(pos, label)
             Style:setIcon(pos, "EntityInfo/Images/Misc/Pos.png")
             Style:setLabel(pos:child(0), "X")
             Style:setLabel(pos:child(1), "Y")
             Style:setLabel(pos:child(2), "Z")
+            Style:setLabelColor(pos, "#bfbfbf")
         end
     end
 end
@@ -294,31 +296,48 @@ end
 function EntityInfo.styler:Rotation(entity, context)
 
     if(entity:contains("Rotation", TYPE.LIST, TYPE.FLOAT)) then
-
-        local rotString = ""
         local rot = entity.lastFound
         local yaw = rot:child(0)
         local pitch = rot:child(1)
+        local directions = {
+            ["yaw"] = {
+                "North",
+                "North-West",
+                "West",
+                "South-West",
+                "South",
+                "South-East",
+                "East",
+                "North-East"
+            },
+            ["pitch"] = {
+                "Up",
+                "Slighty Up",
+                "Out",
+                "Slighty Down",
+                "Down"
+            }
+        }
+        
+        local yawM = yaw.value % 360
+        local index = math.floor((yawM + 22.5) / 45) % 8 + 1
+        yaw.text = "Facing " .. directions["yaw"][index]
+        
+        local pitchM = pitch.value % 90
+        local index = math.floor((pitchM + 60) / 30) % 5 + 1
+        pitch.text = "Looking " .. directions["pitch"][index]
 
-        if(yaw.value > 337.5 or yaw.value <= 22.5) then rotString = rotString .. "Facing North"
-        elseif(yaw.value > 22.5 and yaw.value <= 67.5) then rotString = rotString .. "Facing North-East"
-        elseif(yaw.value > 67.5 and yaw.value <= 112.5) then rotString = rotString .. "Facing East"
-        elseif(yaw.value > 112.5 and yaw.value <= 157.5) then rotString = rotString .. "Facing South-East"
-        elseif(yaw.value > 157.5 and yaw.value <= 202.5) then rotString = rotString .. "Facing South"
-        elseif(yaw.value > 202.5 and yaw.value <= 247.5) then rotString = rotString .. "Facing South-West"
-        elseif(yaw.value > 247.5 and yaw.value <= 292.5) then rotString = rotString .. "Facing West"
-        elseif(yaw.value > 292.5 and yaw.value <= 337.5) then rotString = rotString .. "Facing North-West"
+        rot.text = yaw.text
+
+        if(rot.text ~= nil) then
+            rot.text = rot.text .. " and " .. pitch.text
         end
-    
-        if(pitch.value >= -90 and pitch.value < -45) then rotString = rotString .. " and Down"
-        elseif(pitch.value >= 45 and pitch.value <= 90) then rotString = rotString .. " and Up"
-        end
-    
+
+        Style:setLabel(yaw, "Yaw: " .. yaw.text)
+        Style:setLabel(pitch, "Pitch: " .. pitch.text)
         Style:setLabelColor(rot, "#bfbfbf")
-        Style:setLabel(rot, rotString)
+        Style:setLabel(rot, rot.text)
         Style:setIcon(rot, "EntityInfo/Images/Misc/Rot.png")
-        Style:setLabel(rot:child(0), "Yaw")
-        Style:setLabel(rot:child(1), "Pitch")
     end
 end
 
