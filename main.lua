@@ -796,6 +796,30 @@ function EntityInfo.styler:Boat(entity, context)
                 Style:setIcon(tag, "EntityInfo/Images/Boat/" .. name .. ".png")
             end
         end
+    elseif(context.edition == EDITION.CONSOLE) then
+        
+        if(entity:contains("Type",TYPE.STRING)) then
+            local typeId = entity.lastFound
+            local typeName = ""
+
+            if(typeId.value == "oak") then typeName = "Oak"
+            elseif(typeId.value == "spruce") then typeName = "Spruce"
+            elseif(typeId.value == "birch") then typeName = "Birch"
+            elseif(typeId.value == "jungle") then typeName = "Jungle"
+            elseif(typeId.value == "acacia") then typeName = "Acacia"
+            elseif(typeId.value == "dark_oak") then typeName = "Dark Oak"
+            end
+
+            if(typeName ~= "") then
+                entity.info.meta = typeName
+                Style:setLabel(typeId, typeName)
+
+                typeName = string.gsub(typeName, "%s+", "")
+
+                entity.info.iconPath = "Boat/" .. typeName
+                Style:setIcon(typeId, "EntityInfo/Images/Boat/" .. typeName .. ".png")
+            end
+        end
     end
 end
 
