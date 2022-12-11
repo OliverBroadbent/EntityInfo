@@ -8,18 +8,18 @@ EntityInfo = {
 -- CUSTOM FUNCTIONS
 
 function EntityInfo.styler:ticksToTime(ticks)
-    local secs = ticks / 20
-    local mins = math.floor(secs / 60)
-    local hours = math.floor(mins / 60)
-    local days = math.floor(hours / 24)
-
     local text = ""
-    if days > 0 then text = text .. string.format("%d days, ", days) end
-    if hours > 0 then text = text .. string.format("%d hours, ", hours % 24) end
-    if mins > 0 then text = text .. string.format("%d minutes, ", mins % 60) end
-    if secs > 0 then text = text .. string.format("%d seconds", math.floor(secs % 60)) end
 
-    text = string.gsub(text, ", $", "")
+    local secs = ticks/20
+    local mins = (math.floor(secs))//60
+    local hours = mins//60
+    local days = hours//24
+
+    if(days > 0) then text = text .. tostring(days) .. " days, " end
+    if(hours > 0) then text = text .. tostring(hours%24) .. " hours, " end
+    if(mins > 0) then text = text .. tostring(mins%60) .. " minutes, " end
+    if(secs > 0) then text = text .. string.gsub(string.format("%.1f", math.abs(secs%60)), "%.0", "") .. " seconds" end
+
     return text
 end
 
@@ -323,7 +323,7 @@ function EntityInfo.styler:Rotation(entity, context)
         local index = math.floor((yawM + 22.5) / 45) % 8 + 1
         yaw.text = "Facing " .. directions["yaw"][index]
         
-        local pitchM = pitch.value % 90
+        local pitchM = pitch.value % 180
         local index = math.floor((pitchM + 60) / 30) % 5 + 1
         pitch.text = "Looking " .. directions["pitch"][index]
 
