@@ -965,6 +965,23 @@ function EntityInfo.styler:ChestBoat(entity, context)
                 Style:setIcon(typeId, "EntityInfo/Images/ChestBoat/" .. typeName .. ".png")
             end
         end
+
+        if(entity:contains("Items", TYPE.LIST, TYPE.COMPOUND)) then
+            local itemCount = entity.lastFound.childCount
+            local text = ""
+    
+            if(itemCount == 0) then text = "Empty"
+            elseif(itemCount == 1) then text = itemCount .. " item"
+            elseif(itemCount > 1) then text = itemCount .. " items"
+            end
+
+            if(entity.info.meta == nil) then
+                entity.info.meta = text
+            else
+                entity.info.meta = entity.info.meta .. ", " .. text
+            end
+        end
+
     elseif(context.edition == EDITION.BEDROCK) then
 
         if(entity:contains("Variant", TYPE.INT)) then
@@ -989,6 +1006,31 @@ function EntityInfo.styler:ChestBoat(entity, context)
     
                 entity.info.iconPath = "ChestBoat/" .. name
                 Style:setIcon(tag, "EntityInfo/Images/ChestBoat/" .. name .. ".png")
+            end
+        end
+
+        if(entity:contains("ChestItems", TYPE.LIST, TYPE.COMPOUND)) then
+            local slots = entity.lastFound
+            local itemCount = 0
+            local text = ""
+
+            for i=0, slots.childCount-1 do
+                local item = slots:child(i)
+
+                if(item:contains("Count", TYPE.BYTE) and item.lastFound.value ~= 0) then
+                    itemCount = itemCount+1
+                end
+            end
+
+            if(itemCount == 0) then text = "Empty"
+            elseif(itemCount == 1) then text = itemCount .. " item"
+            elseif(itemCount > 1) then text = itemCount .. " items"
+            end
+
+            if(entity.info.meta == nil) then
+                entity.info.meta = text
+            else
+                entity.info.meta = entity.info.meta .. ", " .. text
             end
         end
     end
