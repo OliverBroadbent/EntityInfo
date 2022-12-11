@@ -747,31 +747,55 @@ function EntityInfo.styler:Boat(entity, context)
     if(context.edition == EDITION.JAVA) then
         
         if(entity:contains("Type",TYPE.STRING)) then
-        local typeId = entity.lastFound
-        local typeName = ""
+            local typeId = entity.lastFound
+            local typeName = ""
 
-        if(typeId.value == "oak") then typeName = "Oak"
-        elseif(typeId.value == "spruce") then typeName = "Spruce"
-        elseif(typeId.value == "birch") then typeName = "Birch"
-        elseif(typeId.value == "jungle") then typeName = "Jungle"
-        elseif(typeId.value == "acacia") then typeName = "Acacia"
-        elseif(typeId.value == "dark_oak") then typeName = "Dark Oak"
-        elseif(typeId.value == "mangrove") then typeName = "Mangrove"
-        elseif(typeId.value == "bamboo") then typeName = "Bamboo"
+            if(typeId.value == "oak") then typeName = "Oak"
+            elseif(typeId.value == "spruce") then typeName = "Spruce"
+            elseif(typeId.value == "birch") then typeName = "Birch"
+            elseif(typeId.value == "jungle") then typeName = "Jungle"
+            elseif(typeId.value == "acacia") then typeName = "Acacia"
+            elseif(typeId.value == "dark_oak") then typeName = "Dark Oak"
+            elseif(typeId.value == "mangrove") then typeName = "Mangrove"
+            elseif(typeId.value == "bamboo") then typeName = "Bamboo"
+            end
+
+            if(typeName ~= "") then
+                entity.info.meta = typeName
+                Style:setLabel(typeId, typeName)
+
+                typeName = string.gsub(typeName, "%s+", "")
+
+                entity.info.iconPath = "Boat/" .. typeName
+                Style:setIcon(typeId, "EntityInfo/Images/Boat/" .. typeName .. ".png")
+            end
         end
-
-        if(typeName ~= "") then
-            entity.info.meta = typeName
-            Style:setLabel(typeId, typeName)
-
-            typeName = string.gsub(typeName, "%s+", "")
-
-            entity.info.iconPath = "Boat/" .. typeName
-            Style:setIcon(typeId, "EntityInfo/Images/Boat/" .. typeName .. ".png")
-        end
-    end
     elseif(context.edition == EDITION.BEDROCK) then
 
+        if(entity:contains("Variant", TYPE.INT)) then
+            local id = entity.lastFound.value
+            local tag = entity.lastFound
+            local name = ""
+    
+            if(id == 0) then name = "Oak"
+            elseif(id == 1) then name = "Spruce"
+            elseif(id == 2) then name = "Birch"
+            elseif(id == 3) then name = "Jungle"
+            elseif(id == 4) then name = "Acacia"
+            elseif(id == 5) then name = "Dark Oak"
+            elseif(id == 6) then name = "Mangrove"
+            end
+    
+            if(name ~= "") then
+                entity.info.meta = name
+                Style:setLabel(tag, name)
+    
+                name = string.gsub(name, "%s+", "")
+    
+                entity.info.iconPath = "Boat/" .. name
+                Style:setIcon(tag, "EntityInfo/Images/Boat/" .. name .. ".png")
+            end
+        end
     end
 end
 
@@ -894,31 +918,55 @@ function EntityInfo.styler:ChestBoat(entity, context)
     if(context.edition == EDITION.JAVA) then
 
         if(entity:contains("Type",TYPE.STRING)) then
-        local typeId = entity.lastFound
-        local typeName = ""
+            local typeId = entity.lastFound
+            local typeName = ""
 
-        if(typeId.value == "oak") then typeName = "Oak"
-        elseif(typeId.value == "spruce") then typeName = "Spruce"
-        elseif(typeId.value == "birch") then typeName = "Birch"
-        elseif(typeId.value == "jungle") then typeName = "Jungle"
-        elseif(typeId.value == "acacia") then typeName = "Acacia"
-        elseif(typeId.value == "dark_oak") then typeName = "Dark Oak"
-        elseif(typeId.value == "mangrove") then typeName = "Mangrove"
-        elseif(typeId.value == "bamboo") then typeName = "Bamboo"
+            if(typeId.value == "oak") then typeName = "Oak"
+            elseif(typeId.value == "spruce") then typeName = "Spruce"
+            elseif(typeId.value == "birch") then typeName = "Birch"
+            elseif(typeId.value == "jungle") then typeName = "Jungle"
+            elseif(typeId.value == "acacia") then typeName = "Acacia"
+            elseif(typeId.value == "dark_oak") then typeName = "Dark Oak"
+            elseif(typeId.value == "mangrove") then typeName = "Mangrove"
+            elseif(typeId.value == "bamboo") then typeName = "Bamboo"
+            end
+
+            if(typeName ~= "") then
+                entity.info.meta = typeName
+                Style:setLabel(typeId, typeName)
+
+                typeName = string.gsub(typeName, "%s+", "")
+
+                entity.info.iconPath = "ChestBoat/" .. typeName
+                Style:setIcon(typeId, "EntityInfo/Images/ChestBoat/" .. typeName .. ".png")
+            end
         end
-
-        if(typeName ~= "") then
-            entity.info.meta = typeName
-            Style:setLabel(typeId, typeName)
-
-            typeName = string.gsub(typeName, "%s+", "")
-
-            entity.info.iconPath = "ChestBoat/" .. typeName
-            Style:setIcon(typeId, "EntityInfo/Images/ChestBoat/" .. typeName .. ".png")
-        end
-    end
     elseif(context.edition == EDITION.BEDROCK) then
 
+        if(entity:contains("Variant", TYPE.INT)) then
+            local id = entity.lastFound.value
+            local tag = entity.lastFound
+            local name = ""
+    
+            if(id == 0) then name = "Oak"
+            elseif(id == 1) then name = "Spruce"
+            elseif(id == 2) then name = "Birch"
+            elseif(id == 3) then name = "Jungle"
+            elseif(id == 4) then name = "Acacia"
+            elseif(id == 5) then name = "Dark Oak"
+            elseif(id == 6) then name = "Mangrove"
+            end
+    
+            if(name ~= "") then
+                entity.info.meta = name
+                Style:setLabel(tag, name)
+    
+                name = string.gsub(name, "%s+", "")
+    
+                entity.info.iconPath = "ChestBoat/" .. name
+                Style:setIcon(tag, "EntityInfo/Images/ChestBoat/" .. name .. ".png")
+            end
+        end
     end
 end
 
