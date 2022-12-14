@@ -1526,10 +1526,49 @@ function EntityInfo.styler:TraderLlama(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
+        if(entity:contains("Variant", TYPE.INT)) then
+            local variantId = entity.lastFound
+            local variant = ""
+
+            if(variantId.value == 0) then variant = "Creamy"
+            elseif(variantId.value == 1) then variant = "White"
+            elseif(variantId.value == 2) then variant = "Brown"
+            elseif(variantId.value == 3) then variant = "Gray"
+            end
+
+            if(variant ~= "") then
+                entity.info.meta = variant
+                Style:setLabel(variantId, variant)
+
+                entity.info.iconPath = "Llama/" .. variant
+                Style:setIcon(variantId, "EntityInfo/Images/Llama/" .. variant .. ".png")
+            end
+        end
+
         if(entity:contains("DespawnDelay", TYPE.INT)) then
             local despawn = entity.lastFound
 
-            Style:setLabel(despawn, "Despawns in " .. ticksToTime(despawn.value))
+            Style:setLabel(despawn, "Despawns in " .. self:ticksToTime(despawn.value))
+        end
+    elseif(context.edition == EDITION.BEDROCK) then
+
+        if(entity:contains("Variant", TYPE.INT)) then
+            local variantId = entity.lastFound
+            local variant = ""
+
+            if(variantId.value == 0) then variant = "Creamy"
+            elseif(variantId.value == 1) then variant = "White"
+            elseif(variantId.value == 2) then variant = "Brown"
+            elseif(variantId.value == 3) then variant = "Gray"
+            end
+
+            if(variant ~= "") then
+                entity.info.meta = variant
+                Style:setLabel(variantId, variant)
+
+                entity.info.iconPath = "Llama/" .. variant
+                Style:setIcon(variantId, "EntityInfo/Images/Llama/" .. variant .. ".png")
+            end
         end
     end
 end
