@@ -148,8 +148,8 @@ function EntityInfo.styler:recursion(root, target, context)
                     if(temp2:contains("entity", TYPE.COMPOUND)) then self:ProcessEntity(temp2.lastFound, context) end
                 end
             end
-        elseif(target.type == TYPE.COMPOUND and target.name == "Riding") then 
-            self:ProcessEntity(target.lastFound, context)
+        elseif(target.type == TYPE.COMPOUND and target.name == "Riding") then
+            self:ProcessEntity(target, context)
         elseif(target.type == TYPE.LIST and target.listType == TYPE.COMPOUND and target.name == "Bees") then -- bees in beehives
             for i = 0, target.childCount-1 do local temp1 = target:child(i)
                 if(temp1:contains("EntityData", TYPE.COMPOUND)) then self:ProcessEntity(temp1.lastFound, context) end
@@ -182,7 +182,6 @@ end
 
 function EntityInfo.styler:ProcessEntity(entity, context)
     entity.info = {}
-
     -- level.dat player check
     if(entity:contains("Data", TYPE.COMPOUND)) then
         local dataTag = entity.lastFound
