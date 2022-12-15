@@ -1326,8 +1326,31 @@ end
 function EntityInfo.styler:Horse(entity, context)
 
     if(context.edition == EDITION.JAVA) then
+        local isHorse = true
 
-        if(entity:contains("Variant", TYPE.INT)) then 
+        if(entity:contains("Type", TYPE.INT)) then
+            local id = entity.lastFound.value
+            local text = ""
+            
+            if(id == 1) then text = "Donkey"
+            elseif(id == 2) then text = "Mule"
+            elseif(id == 3) then text = "Zombie Horse"
+            elseif(id == 4) then text = "Skeleton Horse"
+            end
+
+            if(text ~= "") then
+                isHorse = false
+                entity.info.baseName = text
+                Style:setLabel(entity.lastFound, text)
+
+                text = string.gsub(text, "%s+", "")
+
+                entity.info.iconPath = text
+                Style:setIcon(entity.lastFound, "EntityInfo/Images/" .. text .. ".png")
+            end
+        end
+
+        if(entity:contains("Variant", TYPE.INT) and isHorse) then 
             local variant = entity.lastFound
             local color = ""
             local pattern = ""
@@ -1359,7 +1382,6 @@ function EntityInfo.styler:Horse(entity, context)
             entity.info.iconPath = "Horse/" .. color
             Style:setIcon(variant, "EntityInfo/Images/Horse/" .. color .. ".png")
         end
-
     elseif(context.edition == EDITION.BEDROCK) then
 
         if(entity:contains("Variant", TYPE.INT)) then 
