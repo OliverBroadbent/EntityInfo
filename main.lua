@@ -175,7 +175,7 @@ function EntityInfo.styler:recursion(root, target, context)
                 end
             end
         elseif(target.type == TYPE.COMPOUND and target.name == "Riding") then 
-            self:ProcessEntity(target.lastFound, context)
+            self:ProcessEntity(target, context)
         end
     end
 end
