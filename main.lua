@@ -121,6 +121,37 @@ function EntityInfo.styler:getCustomNameJava(entity)
     return ""
 end
 
+function EntityInfo.styler:isBaby(entity)
+    if(entity:contains("Age", TYPE.INT) and entity.lastFound.value < 0) then
+        self:addToEntityLabel(entity, "Baby")
+    elseif(entity:contains("IsBaby", TYPE.BYTE) and entity.lastFound.value == 1) then
+        self:addToEntityLabel(entity, "Baby")
+    end
+end
+
+function EntityInfo.styler:isAngry(entity, context)
+    local isAngry = false
+    if(context.edition == EDITION.JAVA) then
+        if(entity:contains("AngerTime", TYPE.INT) and entity.lastFound.value > 0) then isAngry = true end
+    elseif(context.edition == EDITION.BEDROCK) then
+        if(entity:contains("IsAngry", TYPE.BYTE) and entity.lastFound.value == 1) then isAngry = true end
+    elseif(context.edition == EDITION.CONSOLE) then
+        if(entity:contains("Anger", TYPE.SHORT) and entity.lastFound.value > 0) then isAngry = true end
+    end
+
+    if(isAngry) then
+        self:addToEntityLabel(entity, "Angry")
+    end
+end
+
+function EntityInfo.styler:addToEntityLabel(entity, text)
+    if(entity.info.meta ~= nil) then
+        entity.info.meta = entity.info.meta .. ", " .. text
+    else
+        entity.info.meta = text
+    end
+end
+
 -- BASE ENTITY
 
 function EntityInfo.styler:main(root, context)
@@ -655,6 +686,8 @@ function EntityInfo.styler:Bat(entity, context)
 end
 
 function EntityInfo.styler:Bee(entity, context)
+    self:isBaby(entity)
+    self:isAngry(entity, context)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -694,56 +727,24 @@ function EntityInfo.styler:Bee(entity, context)
 
         if(entity:contains("AngerTime", TYPE.INT)) then
             if(entity.lastFound.value > 0) then
-                entity.info.meta = "Angry"
                 entity.info.iconPath = "Bee/Angry"
-            end
-        end
-
-        if(entity:contains("Age", TYPE.INT)) then
-            if(entity.lastFound.value < 0) then
-                if(entity.info.meta ~= nil) then
-                    entity.info.meta = entity.info.meta .. " Baby"
-                else
-                    entity.info.meta = "Baby"
-                end
-                
             end
         end
 
     elseif(context.edition == EDITION.BEDROCK) then
 
         if(entity:contains("IsAngry", TYPE.BYTE) and entity.lastFound.value ~= 0) then
-            entity.info.meta = "Angry"
             entity.info.iconPath = "Bee/Angry"
-        end
-
-        if(entity:contains("IsBaby", TYPE.BYTE) and entity.lastFound.value ~= 0) then
-            if(entity.info.meta ~= nil) then
-                entity.info.meta = entity.info.meta .. " Baby"
-            else
-                entity.info.meta = "Baby"
-            end
         end
         
     elseif(context.edition == EDITION.JAVA) then
 
         if(entity:contains("AngerTime", TYPE.INT)) then
             if(entity.lastFound.value > 0) then
-                entity.info.meta = "Angry"
                 entity.info.iconPath = "Bee/Angry"
             end
         end
 
-        if(entity:contains("Age", TYPE.INT)) then
-            if(entity.lastFound.value < 0) then
-                if(entity.info.meta ~= nil) then
-                    entity.info.meta = entity.info.meta .. " Baby"
-                else
-                    entity.info.meta = "Baby"
-                end
-                
-            end
-        end
     end
 end
 
@@ -763,6 +764,7 @@ function EntityInfo.styler:Boat(entity, context)
             elseif(typeId.value == "dark_oak") then typeName = "Dark Oak"
             elseif(typeId.value == "mangrove") then typeName = "Mangrove"
             elseif(typeId.value == "bamboo") then typeName = "Bamboo"
+            elseif(typeId.value == "cherry") then typeName = "Cherry"
             end
 
             if(typeName ~= "") then
@@ -789,6 +791,8 @@ function EntityInfo.styler:Boat(entity, context)
             elseif(id == 4) then name = "Acacia"
             elseif(id == 5) then name = "Dark Oak"
             elseif(id == 6) then name = "Mangrove"
+            elseif(id == 7) then name = "Bamboo"
+            elseif(id == 8) then name = "Cherry"
             end
     
             if(name ~= "") then
@@ -828,7 +832,25 @@ function EntityInfo.styler:Boat(entity, context)
     end
 end
 
+function EntityInfo.styler:Camel(entity, context)
+    self:isBaby(entity)
+
+    if(context.edition == EDITION.JAVA) then
+        
+        if(entity:contains("SaddleItem", TYPE.COMPOUND)) then
+            self:addToEntityLabel(entity, "Saddled")
+        end
+
+    elseif(context.edition == EDITION.BEDROCK) then
+        
+        if(entity:contains("Saddled", TYPE.BYTE) and entity.lastFound.value == 1) then
+            entity.info.meta = "Saddled"
+        end
+    end
+end
+
 function EntityInfo.styler:Cat(entity, context) 
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -852,7 +874,7 @@ function EntityInfo.styler:Cat(entity, context)
                 end
     
                 if(variant ~= "") then
-                    entity.info.meta = variant
+                    self:addToEntityLabel(entity, variant)
                     Style:setLabel(variantId, variant)
     
                     variant = string.gsub(variant, "%s+", "")
@@ -881,7 +903,7 @@ function EntityInfo.styler:Cat(entity, context)
                 end
 
                 if(variant ~= "") then
-                    entity.info.meta = variant
+                    self:addToEntityLabel(entity, variant)
                     Style:setLabel(variantId, variant)
 
                     variant = string.gsub(variant, "%s+", "")
@@ -921,7 +943,7 @@ function EntityInfo.styler:Cat(entity, context)
             end
 
             if(variant ~= "") then
-                entity.info.meta = variant
+                self:addToEntityLabel(entity, variant)
                 Style:setLabel(variantId, variant)
 
                 variant = string.gsub(variant, "%s+", "")
@@ -1001,6 +1023,8 @@ function EntityInfo.styler:ChestBoat(entity, context)
             elseif(id == 4) then name = "Acacia"
             elseif(id == 5) then name = "Dark Oak"
             elseif(id == 6) then name = "Mangrove"
+            elseif(id == 7) then name = "Bamboo"
+            elseif(id == 8) then name = "Cherry"
             end
     
             if(name ~= "") then
@@ -1042,6 +1066,7 @@ function EntityInfo.styler:ChestBoat(entity, context)
 end
 
 function EntityInfo.styler:Chicken(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
@@ -1175,6 +1200,10 @@ function EntityInfo.styler:EnderDragon(entity, context)
     end
 end
 
+function EntityInfo.styler:Enderman(entity, context)
+    self:isAngry(entity, context)
+end
+
 function EntityInfo.styler:Endermite(entity, context)
 
     if(entity:contains("Lifetime", TYPE.INT)) then
@@ -1206,6 +1235,7 @@ function EntityInfo.styler:EvocationIllager(entity, context)
 end
 
 function EntityInfo.styler:Fox(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1218,7 +1248,7 @@ function EntityInfo.styler:Fox(entity, context)
             end
 
             if(variant ~= "") then
-                entity.info.meta = variant
+                self:addToEntityLabel(entity, variant)
                 entity.info.iconPath = "Fox/" .. variant
 
                 Style:setLabel(variantId, variant)
@@ -1237,7 +1267,7 @@ function EntityInfo.styler:Fox(entity, context)
             end
 
             if(variant ~= "") then
-                entity.info.meta = variant
+                self:addToEntityLabel(entity, variant)
                 entity.info.iconPath = "Fox/" .. variant
 
                 Style:setLabel(variantId, variant)
@@ -1248,6 +1278,7 @@ function EntityInfo.styler:Fox(entity, context)
 end
 
 function EntityInfo.styler:Frog(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1261,7 +1292,7 @@ function EntityInfo.styler:Frog(entity, context)
             end
 
             if(variant ~= "") then
-                entity.info.meta = variant
+                self:addToEntityLabel(entity, variant)
                 entity.info.iconPath = "Frog/" .. variant
 
                 Style:setLabel(variantId, variant)
@@ -1281,7 +1312,7 @@ function EntityInfo.styler:Frog(entity, context)
             end
 
             if(variant ~= "") then
-                entity.info.meta = variant
+                self:addToEntityLabel(entity, variant)
                 entity.info.iconPath = "Frog/" .. variant
 
                 Style:setLabel(variantId, variant)
@@ -1312,7 +1343,12 @@ function EntityInfo.styler:GlowSquid(entity, context)
     end
 end
 
+function EntityInfo.styler:Goat(entity, context)
+    self:isBaby(entity)
+end
+
 function EntityInfo.styler:Hoglin(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
         if(entity:contains("TimeInOverworld", TYPE.INT) and entity.lastFound.value > 0) then
@@ -1324,6 +1360,7 @@ function EntityInfo.styler:Hoglin(entity, context)
 end
 
 function EntityInfo.styler:Horse(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
         local isHorse = true
@@ -1374,7 +1411,7 @@ function EntityInfo.styler:Horse(entity, context)
             elseif(patternId == 4) then pattern = "Black Dots"
             end
 
-            entity.info.meta = color
+            self:addToEntityLabel(entity, color .. " & " .. pattern)
             Style:setLabel(variant, color .. " & " .. pattern)
 
             color = string.gsub(color, "%s+", "")
@@ -1399,7 +1436,9 @@ function EntityInfo.styler:Horse(entity, context)
 
             if(variant ~= "") then
                 Style:setLabel(variantId, variant)
-                entity.info.meta = variant
+                if(entity.info.meta ~= nil) then entity.info.meta = entity.info.meta .. ", " .. variant
+                else entity.info.meta = variant
+                end
 
                 variant = string.gsub(variant, "%s+", "")
 
@@ -1422,9 +1461,10 @@ function EntityInfo.styler:Horse(entity, context)
 
             if(variant ~= "") then
                 Style:setLabel(variantId, variant)
-                entity.info.meta = entity.info.meta .. " & " .. variant
+                if(entity.info.meta ~= nil) then entity.info.meta = entity.info.meta .. " & " .. variant
+                else entity.info.meta = variant
+                end
             end
-
         end
 
     elseif(context.edition == EDITION.CONSOLE) then
@@ -1479,7 +1519,7 @@ function EntityInfo.styler:Horse(entity, context)
             elseif(patternId == 4) then pattern = "Black Dots"
             end
 
-            entity.info.meta = color
+            self:addToEntityLabel(entity, color .. " & " .. pattern)
             Style:setLabel(variant, color .. " & " .. pattern)
 
             color = string.gsub(color, "%s+", "")
@@ -1510,34 +1550,78 @@ function EntityInfo.styler:Illusioner(entity, context)
     end
 end
 
+function EntityInfo.styler:IronGolem(entity, context)
+    self:isAngry(entity, context)
+end
+
 function EntityInfo.styler:Llama(entity, context)
 
-    if(context.edition == EDITION.JAVA or context.edition == EDITION.BEDROCK) then
+    if(entity:contains("Strength", TYPE.INT)) then 
+        local str = entity.lastFound
 
-        if(entity:contains("Strength", TYPE.INT)) then 
-            local str = entity.lastFound
+        if(str.value >= 1 and str.value <= 5) then 
+            Style:setLabel(str, str.value*3 .. " inventory slots")
+        end
+    end
 
-            if(str.value >= 1 and str.value <= 5) then 
-                Style:setLabel(str, str.value*3 .. " inventory slots")
-            end
+    if(entity:contains("Variant", TYPE.INT)) then
+        local variantId = entity.lastFound
+        local variant = ""
+
+        if(variantId.value == 0) then variant = "Creamy"
+        elseif(variantId.value == 1) then variant = "White"
+        elseif(variantId.value == 2) then variant = "Brown"
+        elseif(variantId.value == 3) then variant = "Gray"
         end
 
-        if(entity:contains("Variant", TYPE.INT)) then
-            local variantId = entity.lastFound
-            local variant = ""
+        if(variant ~= "") then
+            self:addToEntityLabel(entity, variant)
+            Style:setLabel(variantId, variant)
 
-            if(variantId.value == 0) then variant = "Creamy"
-            elseif(variantId.value == 1) then variant = "White"
-            elseif(variantId.value == 2) then variant = "Brown"
-            elseif(variantId.value == 3) then variant = "Gray"
+            entity.info.iconPath = "Llama/" .. variant
+            Style:setIcon(variantId, "EntityInfo/Images/Llama/" .. variant .. ".png")
+        end
+    end
+
+    if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
+        if(entity:contains("Items", TYPE.LIST, TYPE.COMPOUND)) then
+            local itemCount = entity.lastFound.childCount
+            local text = ""
+    
+            if(itemCount == 0) then text = "Empty"
+            elseif(itemCount == 1) then text = itemCount .. " item"
+            elseif(itemCount > 1) then text = itemCount .. " items"
             end
 
-            if(variant ~= "") then
-                entity.info.meta = variant
-                Style:setLabel(variantId, variant)
+            if(entity.info.meta == nil) then
+                entity.info.meta = text
+            else
+                entity.info.meta = entity.info.meta .. ", " .. text
+            end
+        end
+    elseif(context.edition == EDITION.BEDROCK) then
+        if(entity:contains("Chested", TYPE.BYTE) and entity.lastFound.value == 1) and (entity:contains("ChestItems", TYPE.LIST, TYPE.COMPOUND)) then
+            local slots = entity.lastFound
+            local itemCount = 0
+            local text = ""
 
-                entity.info.iconPath = "Llama/" .. variant
-                Style:setIcon(variantId, "EntityInfo/Images/Llama/" .. variant .. ".png")
+            for i=1, slots.childCount-1 do
+                local item = slots:child(i)
+
+                if(item:contains("Count", TYPE.BYTE) and item.lastFound.value ~= 0) then
+                    itemCount = itemCount+1
+                end
+            end
+
+            if(itemCount == 0) then text = "Empty"
+            elseif(itemCount == 1) then text = itemCount .. " item"
+            elseif(itemCount > 1) then text = itemCount .. " items"
+            end
+
+            if(entity.info.meta == nil) then
+                entity.info.meta = text
+            else
+                entity.info.meta = entity.info.meta .. ", " .. text
             end
         end
     end
@@ -1741,6 +1825,7 @@ function EntityInfo.styler:Mooshroom(entity, context)
 end
 
 function EntityInfo.styler:Ocelot(entity, context)
+    self:isBaby(entity)
 
     if((context.edition == EDITION.JAVA and EntityInfo.styler.version < 1907) or (context.edition == EDITION.CONSOLE)) then -- 18w44a
         
@@ -1754,8 +1839,9 @@ function EntityInfo.styler:Ocelot(entity, context)
             end
 
             if(text ~= "") then
-                entity.info.meta = text
+                self:addToEntityLabel(entity, text)
                 entity.info.iconPath = "Cat/" .. text
+
                 Style:setLabel(id, text)
                 Style:setIcon(id, "EntityInfo/Images/Cat/" .. text .. ".png")
             end
@@ -1764,6 +1850,7 @@ function EntityInfo.styler:Ocelot(entity, context)
 end
 
 function EntityInfo.styler:Panda(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -1795,10 +1882,10 @@ function EntityInfo.styler:Panda(entity, context)
                 Style:setIcon(hiddenGene, "EntityInfo/Images/Panda/" .. hiddenGene.formattedName .. ".png")
             end
             if((mainGene.formattedName == "Normal" or mainGene.formattedName == "Aggressive" or mainGene.formattedName == "Lazy" or mainGene.formattedName == "Worried" or mainGene.formattedName == "Playful") or (hiddenGene.formattedName == mainGene.formattedName)) then
-                entity.info.meta = mainGene.formattedName
+                self:addToEntityLabel(entity, mainGene.formattedName)
                 entity.info.iconPath = "Panda/" .. mainGene.formattedName
             else
-                entity.info.meta = "Normal"
+                self:addToEntityLabel(entity, "Normal")
                 entity.info.iconPath = "Panda/Normal.png"
             end
         end
@@ -1905,35 +1992,25 @@ function EntityInfo.styler:Phantom(entity, context)
 end
 
 function EntityInfo.styler:Pig(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
-        
         if(entity:contains("Saddle", TYPE.BYTE) and entity.lastFound.value == 1) then
-            entity.info.meta = "Saddled"
+            self:addToEntityLabel(entity, "Saddled")
         end
-
     elseif(context.edition == EDITION.BEDROCK) then
-        
         if(entity:contains("Saddled", TYPE.BYTE) and entity.lastFound.value == 1) then
-            entity.info.meta = "Saddled"
+            self:addToEntityLabel(entity, "Saddled")
         end
     end
 end
 
 function EntityInfo.styler:Piglin(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
-
         if(entity:contains("TimeInOverworld", TYPE.INT) and entity.lastFound.value > 0) then
             Style:setLabel(entity.lastFound, "Converts to a Zombified Piglin in " .. self:ticksToTime(300 - entity.lastFound.value))
-        end
-
-        if(entity:contains("IsBaby", TYPE.BYTE) and entity.lastFound.value == 1) then
-            entity.info.meta = "Baby"
-        end
-    elseif(context.edition == EDITION.BEDROCK) then
-        if(entity:contains("IsBaby", TYPE.BYTE) and entity.lastFound.value == 1) then
-            entity.info.meta = "Baby"
         end
     end
 end
@@ -1941,7 +2018,6 @@ end
 function EntityInfo.styler:PiglinBrute(entity, context)
 
     if(context.edition == EDITION.JAVA) then
-
         if(entity:contains("TimeInOverworld", TYPE.INT) and entity.lastFound.value > 0) then
             Style:setLabel(entity.lastFound, "Converts to a Zombified Piglin in " .. self:ticksToTime(300 - entity.lastFound.value))
         end
@@ -1960,6 +2036,11 @@ function EntityInfo.styler:PiglinBrute(entity, context)
             end
         end
     end
+end
+
+function EntityInfo.styler:PolarBear(entity, context)
+    self:isBaby(entity)
+    self:isAngry(entity, context)
 end
 
 function EntityInfo.styler:Pufferfish(entity, context)
@@ -1999,11 +2080,12 @@ function EntityInfo.styler:Pufferfish(entity, context)
 end
 
 function EntityInfo.styler:Rabbit(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
 
         if(self:getCustomNameJava(entity) == "Toast") then
-            entity.info.meta = "Toast"
+            self:addToEntityLabel(entity, "Toast")
             entity.info.iconPath = "Rabbit/Toast"
         elseif(entity:contains("RabbitType", TYPE.INT)) then
             local rabbitType = entity.lastFound
@@ -2020,7 +2102,7 @@ function EntityInfo.styler:Rabbit(entity, context)
 
             if(variant ~= "") then
                 Style:setLabel(rabbitType, variant)
-                entity.info.meta = variant
+                self:addToEntityLabel(entity, variant)
     
                 variant = string.gsub(variant, "%s+", "")
 
@@ -2032,7 +2114,7 @@ function EntityInfo.styler:Rabbit(entity, context)
     elseif(context.edition == EDITION.BEDROCK) then
 
         if(entity:contains("CustomName", TYPE.STRING) and entity.lastFound.value == "Toast") then
-            entity.info.meta = "Toast"
+            self:addToEntityLabel(entity, "Toast")
             entity.info.iconPath = "Rabbit/Toast"
         elseif(entity:contains("Variant", TYPE.INT)) then
             local rabbitType = entity.lastFound
@@ -2048,7 +2130,7 @@ function EntityInfo.styler:Rabbit(entity, context)
 
             if(variant ~= "") then
                 Style:setLabel(rabbitType, variant)
-                entity.info.meta = variant
+                self:addToEntityLabel(entity, variant)
     
                 variant = string.gsub(variant, "%s+", "")
 
@@ -2060,7 +2142,7 @@ function EntityInfo.styler:Rabbit(entity, context)
     elseif(context.edition == EDITION.CONSOLE) then
 
         if(entity:contains("CustomName", TYPE.STRING) and entity.lastFound.value == "Toast") then
-            entity.info.meta = "Toast"
+            self:addToEntityLabel(entity, "Toast")
             entity.info.iconPath = "Rabbit/Toast"
         elseif(entity:contains("RabbitType", TYPE.INT)) then
             local rabbitType = entity.lastFound
@@ -2077,7 +2159,7 @@ function EntityInfo.styler:Rabbit(entity, context)
 
             if(variant ~= "") then
                 Style:setLabel(rabbitType, variant)
-                entity.info.meta = variant
+                self:addToEntityLabel(entity, variant)
     
                 variant = string.gsub(variant, "%s+", "")
 
@@ -2119,6 +2201,7 @@ function EntityInfo.styler:Ravager(entity, context)
 end
 
 function EntityInfo.styler:Sheep(entity, context)
+    self:isBaby(entity)
 
     if(entity:contains("Color", TYPE.BYTE)) then
         local colorId = entity.lastFound.value
@@ -2126,7 +2209,7 @@ function EntityInfo.styler:Sheep(entity, context)
         if(colorId >= 0 and colorId < 16) then
             local colorStr = self:colorToString(colorId).name
 
-            entity.info.meta = colorStr
+            self:addToEntityLabel(entity, colorStr)
             Style:setLabel(entity.lastFound, "Sheep (" .. colorStr .. ")")
 
             colorStr = string.gsub(colorStr, "%s+", "")
@@ -2209,11 +2292,12 @@ function EntityInfo.styler:Skeleton(entity, context)
 end
 
 function EntityInfo.styler:SkeletonHorse(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
 
         if(entity:contains("SkeletonTrap", TYPE.BYTE) and entity.lastFound.value == 1) then
-            entity.info.meta = "Trap"
+            self:addToEntityLabel(entity, "Trap")
 
             if(entity:contains("SkeletonTrapTime", TYPE.INT)) then
                 local despawnTicks = entity.lastFound.value
@@ -2229,8 +2313,8 @@ function EntityInfo.styler:SkeletonHorse(entity, context)
             local definitions = entity.lastFound 
 
             for i=0, definitions.childCount-1 do
-                if(definitions:child(i).value == "+minecraft:skeleton_trap") then 
-                    entity.info.meta = "Trap"
+                if(definitions:child(i).value == "+minecraft:skeleton_trap") then
+                    self:addToEntityLabel(entity, "Trap")
                     break
                 end
             end
@@ -2274,6 +2358,10 @@ function EntityInfo.styler:Slime(entity, context)
             end
         end
     end
+end
+
+function EntityInfo.styler:Sniffer(entity, context)
+    self:isBaby(entity)
 end
 
 function EntityInfo.styler:Tadpole(entity, context)
@@ -2405,6 +2493,8 @@ function EntityInfo.styler:Wither(entity, context)
 end
 
 function EntityInfo.styler:Wolf(entity, context) 
+    self:isBaby(entity)
+    self:isAngry(entity, context)
 
     if(context.edition == EDITION.JAVA or context.edition == EDITION.CONSOLE) then
         
@@ -2431,16 +2521,9 @@ function EntityInfo.styler:Wolf(entity, context)
 end
 
 function EntityInfo.styler:Zoglin(entity, context)
+    self:isBaby(entity)
 
-    if(context.edition == EDITION.JAVA) then
-
-        if(entity:contains("IsBaby", TYPE.BYTE)) then 
-            if(entity.lastFound.value == 1) then
-                entity.info.meta = "Baby"
-            end
-        end
-
-    elseif(context.edition == EDITION.BEDROCK) then
+    if(context.edition == EDITION.BEDROCK) then
         local isBaby = false
         local babyDefinition = false
 
@@ -2468,6 +2551,7 @@ function EntityInfo.styler:Zoglin(entity, context)
 end
 
 function EntityInfo.styler:Villager(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
         local id = ""
@@ -2515,10 +2599,10 @@ function EntityInfo.styler:Villager(entity, context)
         local jobEntry = Database:find(context.edition, "villager_professions", id, meta, EntityInfo.styler.version, -1)
 
         if(jobEntry ~= nil and jobEntry.valid) then
-            entity.info.meta = vType .. " " .. jobEntry.name
+            self:addToEntityLabel(entity, vType .. " " .. jobEntry.name)
             entity.info.iconPath = "Villager/" .. jobEntry.name
         elseif(vType ~= "") then
-            entity.info.meta = vType
+            self:addToEntityLabel(entity, vType)
         end
 
     elseif(context.edition == EDITION.BEDROCK) then
@@ -2572,10 +2656,10 @@ function EntityInfo.styler:Villager(entity, context)
         local jobEntry = Database:find(context.edition, "villager_professions", id, "", EntityInfo.styler.version, -1)
 
         if(jobEntry ~= nil and jobEntry.valid) then
-            entity.info.meta = vType .. " " .. jobEntry.name
+            self:addToEntityLabel(entity, vType .. " " .. jobEntry.name)
             entity.info.iconPath = "Villager/" .. jobEntry.name
         elseif(vType ~= "") then
-            entity.info.meta = vType
+            self:addToEntityLabel(entity, vType)
         end
 
     elseif(context.edition == EDITION.CONSOLE) then
@@ -2595,13 +2679,18 @@ function EntityInfo.styler:Villager(entity, context)
         local jobEntry = Database:find(context.edition, "villager_professions", id, meta, EntityInfo.styler.version, -1)
 
         if(jobEntry ~= nil and jobEntry.valid) then
-            entity.info.meta = jobEntry.name
+            self:addToEntityLabel(entity, jobEntry.name)
             entity.info.iconPath = "Villager/" .. jobEntry.name
         end
     end
 end
 
+function EntityInfo.styler:ZombiePigman(entity, context)
+    self:isAngry(entity, context)
+end
+
 function EntityInfo.styler:ZombieVillager(entity, context)
+    self:isBaby(entity)
 
     if(context.edition == EDITION.JAVA) then
 
@@ -2665,10 +2754,10 @@ function EntityInfo.styler:ZombieVillager(entity, context)
         local jobEntry = Database:find(context.edition, "villager_professions", id, meta, EntityInfo.styler.version, -1)
 
         if(jobEntry ~= nil and jobEntry.valid) then
-            entity.info.meta = vType .. " " .. jobEntry.name
+            self:addToEntityLabel(entity, vType .. " " .. jobEntry.name)
             entity.info.iconPath = "ZombieVillager/" .. jobEntry.name
         elseif(vType ~= "") then
-            entity.info.meta = vType
+            self:addToEntityLabel(entity, vType)
         end
 
     elseif(context.edition == EDITION.BEDROCK) then
@@ -2722,10 +2811,10 @@ function EntityInfo.styler:ZombieVillager(entity, context)
         local jobEntry = Database:find(context.edition, "villager_professions", id, "", EntityInfo.styler.version, -1)
 
         if(jobEntry ~= nil and jobEntry.valid) then
-            entity.info.meta = vType .. " " .. jobEntry.name
+            self:addToEntityLabel(entity, vType .. " " .. jobEntry.name)
             entity.info.iconPath = "ZombieVillager/" .. jobEntry.name
         elseif(vType ~= "") then
-            entity.info.meta = vType
+            self:addToEntityLabel(entity, vType)
         end
     elseif(context.edition == EDITION.CONSOLE) then
         local id = ""
@@ -2737,7 +2826,7 @@ function EntityInfo.styler:ZombieVillager(entity, context)
         local jobEntry = Database:find(context.edition, "villager_professions", id, meta, EntityInfo.styler.version, -1)
 
         if(jobEntry ~= nil and jobEntry.valid) then
-            entity.info.meta = obEntry.name
+            self:addToEntityLabel(entity, jobEntry.name)
             entity.info.iconPath = "ZombieVillager/" .. jobEntry.name
         end
     end
